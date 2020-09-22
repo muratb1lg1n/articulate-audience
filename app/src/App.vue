@@ -1,16 +1,22 @@
 <template>
   <div id="app">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light"  style="background-color: #4C9900;">
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <router-link class="nav-link" href="#">Giriş <span class="sr-only">(current)</span></router-link>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/"><font-awesome-icon icon='bicycle' /></router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/">Giriş</router-link>
+            <router-link class="nav-link" to="/">Anasayfa</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/kaydol">Kaydol</router-link>
+            <router-link class="nav-link" to="/">Paylasimlar</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/">Etkinlikler</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/giris">Giris Yap</router-link>
           </li>
         </ul>
       </div>
@@ -32,4 +38,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
 }
+
 </style>
+

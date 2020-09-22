@@ -2,12 +2,19 @@
   <div class="container">
     <div class="row mt-5">
       <div class="col-12">
-        <h1>Hoşgeldiniz</h1>
+        <h4>Bir Şeyler Paylaş!</h4>
+        <textarea v-model="icerik" class="form-control" rows="5"></textarea>
+        <button class="btn btn-success btn-lg float-right mt-4">Gönder</button>
       </div>
       <div class="col-12">
-        <ul>
-          <li v-for="item in sehirler" :key="item">{{item}}</li>
-        </ul>
+        <h4>Bugün Paylaşılanlar</h4>
+        <div class="card mt-2">
+          <div class="card-body">
+            <ul>
+              <li v-for="veri in veriler" :key="veri">{{veri}}</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -19,13 +26,16 @@ export default {
   name: 'Giris',
   data () {
     return {
-      sehirler:[]
+      icerik:''
     }
   },
   mounted () {
-    axios.get("http://localhost:3000/sehirler")
-    .then(veri => (this.sehirler = veri.data.citys))
-    .catch(error => {
+    axios.post("http://localhost:3000/paylasim",{icerik:icerik})
+    .then(res=>{
+
+    })
+    .catch(err => {
+
     });
   }
 }

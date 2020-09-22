@@ -14,13 +14,17 @@
         <input type="text" class="form-control" v-model="sifre" placeholder="Şifre">
       </div>
       <div class="col-12">
-        <button class="btn btn-success btn-block" @click="kaydol()">Giriş</button>
+        <button class="btn btn-success btn-block" @click="kaydol()">Kaydol</button>
+      </div>
+       <div class="col-12 mt-3" style="text-align: center;">
+        <router-link to="/giris">Zaten bir hesabin var mi? Giris yap!</router-link>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: 'Kaydol',
   data () {
@@ -39,9 +43,22 @@ export default {
         this.hata.durum = true;
         this.hata.mesaj = 'Lütfen tüm alanları doldurunuz!'
       } else {
-        this.$router.push('/anasayfa');
+        axios.post("http://localhost:3000/kaydol",{email:this.email,sifre:this.sifre})
+        .then(veri =>{
+          this.$router.push('/');
+        })
+        .catch(error => {
+          this.hata.durum = true;
+          this.hata.mesaj = error;
+        });
       }
     }
   }
 }
 </script>
+
+<style scoped>
+input{
+  margin-bottom: 10px;
+}
+</style>

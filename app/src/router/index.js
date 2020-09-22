@@ -11,21 +11,21 @@ const router = new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/',
-      name: 'giris',
-      component: Giris,
-    },
-    {
       path: '/kaydol',
       name: 'kaydol',
       component: Kaydol,
     },
     {
-      path: '/anasayfa',
+      path: '/',
       name: 'anasayfa',
       component: Anasayfa,
       meta: {xx: true},
-    }
+    },
+    {
+      path: '/giris',
+      name: 'giris',
+      component: Giris,
+    },
   ],
 });
 

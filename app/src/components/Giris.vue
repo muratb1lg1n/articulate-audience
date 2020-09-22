@@ -16,6 +16,9 @@
       <div class="col-12">
         <button class="btn btn-success btn-block" @click="girisYap()">Giriş</button>
       </div>
+      <div class="col-12 mt-3" style="text-align: center;">
+        <router-link to="/kaydol">Hesabin yok mu? Hemen bir tane olustur!</router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -40,9 +43,9 @@ export default {
         this.hata.durum = true;
         this.hata.mesaj = 'Lütfen tüm alanları doldurunuz!'
       } else {
-        axios.post("http://localhost:3000/kullanici",{email:this.email,sifre:this.sifre})
+        axios.post("http://localhost:3000/giris",{email:this.email,sifre:this.sifre})
         .then(veri =>{
-          console.log(veri.data)
+          this.$router.push('/anasayfa');
         })
         .catch(error => {
 

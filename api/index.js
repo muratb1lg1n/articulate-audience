@@ -1,28 +1,31 @@
-var express = require('express')
-var app = express()
-var cors = require('cors')
-var bodyParser = require('body-parser')
-const port = 3000
+const express = require('express');
+const app = express();
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const port = 3000;
+const router = require('./router');
 
 //paketleri express de kullan
-app.use(cors())
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use('/',router);
 
-//router islemleri
-app.get('/sehirler', (req,res)=> {
-    res.json({citys:['bursa','istanbul','eskisehir']})
-})
+//veri tabanı bağlantısı
+const vtOzellikleri = {
+    keepAlive: 1,
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+}
 
-app.post('/kullanici', (req,res)=> {
-    if(req.body.email == 'murat' && req.body.sifre == '1234'){
-        res.json({cevap:'basarili'})
-    }else{
-        res.json({cevap: 'basarisiz'})
-    }
-})
+mongoose.connect('mongodb://127.0.0.1:27017/bisiklet',vtOzellikleri).then(()=>{
+    console.log('DB Başarılı.');
+}).catch((err)=>{
+    console.log(`DB Hatalı: ${err.message}`);
+});
 
 //server ayaga kaldir
 app.listen(port, () => {
-    console.log(`server ok http://localhost:${port}`)
+    console.log(`server ok http://localhost:${port}`);
 })
