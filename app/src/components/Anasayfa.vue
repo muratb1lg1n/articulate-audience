@@ -4,7 +4,7 @@
       <div class="col-12">
         <h4>Bir Şeyler Paylaş!</h4>
         <textarea v-model="icerik" class="form-control" rows="5"></textarea>
-        <button class="btn btn-success btn-lg float-right mt-4">Gönder</button>
+        <button class="btn btn-success btn-lg float-right mt-4" @click="kaydol()">Gönder</button>
       </div>
       <div class="col-12">
         <h4>Bugün Paylaşılanlar</h4>
@@ -26,11 +26,34 @@ export default {
   name: 'Giris',
   data () {
     return {
-      icerik:''
+      icerik:'',
+      hata:{
+        durum: false,
+        mesaj: ''
+      },
     }
   },
+  methods: {
+    kaydol(){
+      if(this.icerik === ''){
+        this.hata.durum = true;
+        this.hata.mesaj = 'Lütfen icerigi doldurunuz!'
+      } else {
+        axios.post("http://localhost:3000/paylasim",{icerik: this.icerik})
+        .then(veri =>{
+          this.$router.push('/');
+          this.icerik = '';
+        })
+        .catch(error => {
+          this.hata.durum = true;
+          this.hata.mesaj = error;
+        });
+      }
+    }
+
+  },
   mounted () {
-    axios.post("http://localhost:3000/paylasim",{icerik:icerik})
+    axios.post("http://localhost:3000/paylasim",{icerik:this.icerik})
     .then(res=>{
 
     })

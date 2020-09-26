@@ -6,6 +6,12 @@ const mongoose = require('mongoose');
 const port = 3000;
 const router = require('./router');
 
+
+
+const url = 'mongodb://127.0.0.1:27017/bisiklet'
+
+
+
 //paketleri express de kullan
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -19,8 +25,8 @@ const vtOzellikleri = {
     useNewUrlParser: true,
 }
 
-mongoose.connect('mongodb://127.0.0.1:27017/bisiklet',vtOzellikleri).then(()=>{
-    console.log('DB Başarılı.');
+mongoose.connect(url ,vtOzellikleri).then(()=>{
+    console.log('DB Başarılı');
 }).catch((err)=>{
     console.log(`DB Hatalı: ${err.message}`);
 });

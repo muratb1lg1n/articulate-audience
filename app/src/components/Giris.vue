@@ -45,7 +45,7 @@ export default {
       } else {
         axios.post("http://localhost:3000/giris",{email:this.email,sifre:this.sifre})
         .then(veri =>{
-          this.$router.push('/anasayfa');
+          this.$router.push('/');
         })
         .catch(error => {
 
