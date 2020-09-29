@@ -13,7 +13,6 @@ library.add(faBicycle)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
-Vue.use(axios)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

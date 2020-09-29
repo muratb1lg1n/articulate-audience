@@ -47,8 +47,9 @@ export default {
         .then(veri =>{
           this.$router.push('/');
         })
-        .catch(error => {
-
+        .catch(err => {
+          this.hata.durum = true;
+          this.hata.mesaj = err.response.data.cevap; 
         });
       }
     }

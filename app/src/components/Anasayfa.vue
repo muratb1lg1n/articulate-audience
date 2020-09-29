@@ -3,15 +3,15 @@
     <div class="row mt-5">
       <div class="col-12">
         <h4>Bir Şeyler Paylaş!</h4>
-        <textarea v-model="icerik" class="form-control" rows="5"></textarea>
-        <button class="btn btn-success btn-lg float-right mt-4" @click="kaydol()">Gönder</button>
+        <textarea v-model="icerik" class="form-control" rows="5" ></textarea>
+        <button class="btn btn-success btn-lg float-right mt-4" @click="paylas()" >Gönder</button>
       </div>
       <div class="col-12">
         <h4>Bugün Paylaşılanlar</h4>
         <div class="card mt-2">
           <div class="card-body">
             <ul>
-              <li v-for="veri in veriler" :key="veri">{{veri}}</li>
+              <li v-for="(veri) in veriler" :key="veri">{{veri.icerik}}</li>
             </ul>
           </div>
         </div>
@@ -31,10 +31,14 @@ export default {
         durum: false,
         mesaj: ''
       },
+      veriler:[],
     }
   },
+  mounted(){
+    this.listele();
+  },
   methods: {
-    kaydol(){
+    paylas(){
       if(this.icerik === ''){
         this.hata.durum = true;
         this.hata.mesaj = 'Lütfen icerigi doldurunuz!'
@@ -48,19 +52,16 @@ export default {
           this.hata.durum = true;
           this.hata.mesaj = error;
         });
+        this.listele();
       }
+    },
+    listele(){
+      axios.get('http://localhost:3000/paylasim').then(res=>{
+        this.veriler = res.data;
+      })
     }
 
   },
-  mounted () {
-    axios.post("http://localhost:3000/paylasim",{icerik:this.icerik})
-    .then(res=>{
-
-    })
-    .catch(err => {
-
-    });
-  }
 }
 </script>
 

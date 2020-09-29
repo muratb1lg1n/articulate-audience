@@ -14,6 +14,9 @@
         <input type="text" class="form-control" v-model="sifre" placeholder="Şifre">
       </div>
       <div class="col-12">
+        <input type="text" class="form-control" v-model="nickname" placeholder="Kullanici Adi">
+      </div>
+      <div class="col-12">
         <button class="btn btn-success btn-block" @click="kaydol()">Kaydol</button>
       </div>
        <div class="col-12 mt-3" style="text-align: center;">
@@ -31,6 +34,7 @@ export default {
     return {
       email: '',
       sifre: '',
+      nickname: '',
       hata:{
         durum: false,
         mesaj: ''
@@ -43,13 +47,13 @@ export default {
         this.hata.durum = true;
         this.hata.mesaj = 'Lütfen tüm alanları doldurunuz!'
       } else {
-        axios.post("http://localhost:3000/kaydol",{email:this.email,sifre:this.sifre})
+        axios.post("http://localhost:3000/kaydol",{email:this.email,sifre:this.sifre, nickname: this.nickname})
         .then(veri =>{
           this.$router.push('/');
         })
         .catch(error => {
           this.hata.durum = true;
-          this.hata.mesaj = error;
+          this.hata.mesaj = error.response.data.cevap;
         });
       }
     }
