@@ -3,7 +3,8 @@ const router = express.Router();
 const Kullanici = require('./model/kullanici');
 const Paylasim = require('./model/paylasim');
 const bcrypt = require('bcrypt');
-const kullanici = require("./model/kullanici");
+const jwt = require('jsonwebtoken');
+
 
 router.post('/giris', (req,res)=> {
     Kullanici.findOne({email:req.body.email}).then(kullanici=>{
@@ -15,7 +16,11 @@ router.post('/giris', (req,res)=> {
                         cevap: 'Hatalı email veya şifre!'
                     });
                 } else {
-                    res.status(200).json({cevap:'Giriş başarılı!'});
+                    const token = jwt.sign({kullanici}, 'murat12345', {expiresIn: 3600});
+                    res.status(200).json({
+                        token: token,
+                        cevap: 'Giriş başarılı!'
+                    });
                 }
             });
         } else {
@@ -27,7 +32,6 @@ router.post('/giris', (req,res)=> {
 });
 
 router.post('/kaydol', (req,res)=> {
-
     const email = req.body.email;
     const sifre = req.body.sifre;
     const nickname = req.body.nickname;
@@ -62,6 +66,14 @@ router.post('/kaydol', (req,res)=> {
     })
 });
 
+await Kullanici.findOne({_id:ObjectId(req.kullanici.veri._id)}).then(bilgi=>{
+    res.status(200).send(
+        {
+            bilgi: bilgi
+        }
+    );
+});
+
 
 router.post('/paylasim', (req,res)=> {
     var yeniPaylasim = new Paylasim({
@@ -78,6 +90,15 @@ router.get('/paylasim',(req, res)=>{
     Paylasim.find().then(veriler => {
         res.json(veriler);
     })
+});
+
+router.delete('/paylasim/:id',(req,res)=>{
+    const id = req.params.id;
+    Paylasim.deleteOne({_id: id}).then(veri=>{
+        res.status(200).json({
+            mesaj: 'Site başarıyla silindi!'
+        });
+    });
 })
   
   

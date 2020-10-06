@@ -1,69 +1,38 @@
 <template>
-  <div class="container">
-    <div class="row mt-5">
-      <div class="col-12">
-        <h4>Bir Şeyler Paylaş!</h4>
-        <textarea v-model="icerik" class="form-control" rows="5" ></textarea>
-        <button class="btn btn-success btn-lg float-right mt-4" @click="paylas()" >Gönder</button>
+  <div>
+    <nav class="navbar navbar-expand-lg navbar-light"  style="background-color: #4C9900;">
+      <div class="container collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <router-link class="nav-link" to="/"><font-awesome-icon icon='bicycle' /></router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/">Anasayfa</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/">Paylasimlar</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/">Etkinlikler</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/profil">Profil</router-link>
+          </li>
+        </ul>
       </div>
-      <div class="col-12">
-        <h4>Bugün Paylaşılanlar</h4>
-        <div class="card mt-2">
-          <div class="card-body">
-            <ul>
-              <li v-for="(veri) in veriler" :key="veri">{{veri.icerik}}</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
+    </nav>
+    <router-view/>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import {mapGetters,mapActions} from 'vuex';
 export default {
-  name: 'Giris',
+  name: 'Anasayfa',
   data () {
     return {
-      icerik:'',
-      hata:{
-        durum: false,
-        mesaj: ''
-      },
-      veriler:[],
     }
-  },
-  mounted(){
-    this.listele();
-  },
-  methods: {
-    paylas(){
-      if(this.icerik === ''){
-        this.hata.durum = true;
-        this.hata.mesaj = 'Lütfen icerigi doldurunuz!'
-      } else {
-        axios.post("http://localhost:3000/paylasim",{icerik: this.icerik})
-        .then(veri =>{
-          this.$router.push('/');
-          this.icerik = '';
-        })
-        .catch(error => {
-          this.hata.durum = true;
-          this.hata.mesaj = error;
-        });
-        this.listele();
-      }
-    },
-    listele(){
-      axios.get('http://localhost:3000/paylasim').then(res=>{
-        this.veriler = res.data;
-      })
-    }
-
-  },
+  }
 }
 </script>
-
-<style scoped>
-</style>
