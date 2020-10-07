@@ -66,15 +66,6 @@ router.post('/kaydol', (req,res)=> {
     })
 });
 
-await Kullanici.findOne({_id:ObjectId(req.kullanici.veri._id)}).then(bilgi=>{
-    res.status(200).send(
-        {
-            bilgi: bilgi
-        }
-    );
-});
-
-
 router.post('/paylasim', (req,res)=> {
     var yeniPaylasim = new Paylasim({
         icerik: req.body.icerik,
@@ -101,7 +92,5 @@ router.delete('/paylasim/:id',(req,res)=>{
     });
 })
   
-  
 
-
-module.exports = router;
+module.exports = router

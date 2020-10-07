@@ -1,5 +1,5 @@
 <template>
-  <div id="giris" class="pt-5">
+  <div id="giris">
     <div class="container mt-5">
       <div class="row">
         <div class="col-12">
@@ -32,8 +32,8 @@ export default {
   name: 'Giris',
   data () {
     return {
-      email: 'temhaangelio@gmail.com',
-      sifre: '11',
+      email: '',
+      sifre: '',
       hata:{
         durum: false,
         mesaj: ''
@@ -64,11 +64,12 @@ export default {
 <style scoped>
   #giris{
     height: 100vh;
-    background: url('../assets/bg.jpg') no-repeat center center fixed; 
+    background: url('../assets/peloton.jpg') no-repeat center center fixed; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
+    padding-top: 20vh;
   }
   .container{
     max-width: 500px;
