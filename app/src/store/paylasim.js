@@ -30,7 +30,7 @@ const actions = {
     },
     paylasimEkle({commit}, veri){
         api.post('paylasim',{icerik:veri}).then(res=>{
-            commit('PAYLASIM_EKLE', veri);
+            commit('PAYLASIM_EKLE', veri)
         });
     },
     paylasimSil({commit}, veri){
