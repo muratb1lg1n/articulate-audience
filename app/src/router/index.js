@@ -5,6 +5,8 @@ import Kaydol from '@/components/Kaydol'
 import Anasayfa from '@/components/Anasayfa'
 import Paylasim from '@/components/Paylasim'
 import Profil from '@/components/Profil'
+import ProfilPaylasim from '@/components/ProfilPaylasim'
+import ProfilEtkinlik from '@/components/ProfilEtkinlik'
 
 Vue.use(Router)
 
@@ -22,11 +24,28 @@ const router = new Router({
     },
     {
       path: '/',
+      name: Anasayfa,
       component: Anasayfa,
       meta: { requiresAuth: true },
       children:[
-        { path: '/', component: Paylasim },
-        { path: '/profil', component: Profil }
+        {
+          path: '/',
+          component: Paylasim
+        },
+        {
+          path: '/profil',
+          component: Profil,
+          children: [
+            {
+              path: '/profil/',
+              component: ProfilPaylasim
+            },
+            {
+              path: '/profil/etkinlikler',
+              component: ProfilEtkinlik
+            }
+          ]
+        }
       ]
     }
   ],

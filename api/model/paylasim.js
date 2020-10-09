@@ -2,8 +2,13 @@ const mongoose = require('mongoose');
 const paylasimSchema = new mongoose.Schema({
     icerik:{
         type: String,
-        required: true
-    }
+        required: true,
+    },
+    tarih:{
+        type: Date,
+        default: Date.now(),
+        
+    },
 },
 {
     collection: 'paylasim'

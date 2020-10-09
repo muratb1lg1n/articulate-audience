@@ -9,11 +9,18 @@
       <div id="kullaniciad">Kullanici Adi<br>@rumuz</div>
       </div>
       <div id="profildetay">
-        <div id="aciklama">Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500'lerden beri endüstri standardı sahte metinler olarak kullanılmıştır. Beşyüz yıl boyunca varlığını sürdürmekle kalmamış, aynı zamanda pek değişmeden elektronik</div>
+        <div id="aciklama">Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. Lorem Ipsum, adı bilinmeyen bir matbaacının bistry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, whenalso the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</div>
         <div id="ilgispor">#tenis #basketbol #bilardo #bisiklet</div>
       </div>
     </div>
     <div class="col-12" id='line'></div>
+    <div class="col-3" id="profilrouter">
+      <ul class="col-3" id="routerlist">
+        <li id="paylasilan"><router-link class="btn btn-outline-secondary" to="/profil">Paylastiklarim</router-link></li>
+        <li id="paylasilan"><router-link class="btn btn-outline-secondary" to="/profil/etkinlikler">Etkinliklerim</router-link></li>
+      </ul>
+    </div>
+    <router-view/>
   </div>
 </template>
 
@@ -40,16 +47,19 @@ export default {
 </script>
 
 <style scoped>
+
 #aciklama{
   -webkit-column-width: auto;
   -moz-column-width: auto;
   column-width: auto;
+  max-height: 170px;
 }
 #circle{
   width: 150px;
   height: 150px;
   border-radius: 50%;
   background-color: grey;
+  margin: 0 auto;
 }
 #kullaniciad{
   text-align: center;
@@ -61,7 +71,23 @@ export default {
 }
 #line{
   margin-top: 10px;
-  background-color: black;
+  background-color: #4C9900;
   height: 1px;
 }
+ul{
+  margin-bottom: 0;
+  left: 20px;
+}
+li{
+  list-style: none;
+  margin-top: 40px;
+  text-align: center;
+}
+.btn{
+  width: 130px;
+}
+.btn:focus{
+  border-color: greenyellow;
+}
+
 </style>
