@@ -5,33 +5,39 @@
         <button @click="kullaniciCikis" class="btn btn-danger float-right">Çıkış Yap</button>
       </div>
       <div class="col-3" id="profilresim">
-      <div id="circle"></div>
-      <div id="kullaniciad">Kullanici Adi<br>@rumuz</div>
+        <div id="circle"></div>
+        <div id="kullaniciad">@{{kullanici.nickname}}</div>
       </div>
-      <div id="profildetay">
+      <div class="col-9" id="profildetay">
         <div id="aciklama">Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. Lorem Ipsum, adı bilinmeyen bir matbaacının bistry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, whenalso the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</div>
         <div id="ilgispor">#tenis #basketbol #bilardo #bisiklet</div>
       </div>
     </div>
-    <div class="col-12" id='line'></div>
-    <div class="col-3" id="profilrouter">
-      <ul class="col-3" id="routerlist">
-        <li id="paylasilan"><router-link class="btn btn-outline-secondary" to="/profil">Paylastiklarim</router-link></li>
-        <li id="paylasilan"><router-link class="btn btn-outline-secondary" to="/profil/etkinlikler">Etkinliklerim</router-link></li>
-      </ul>
+    <hr id="line">
+    <div class="row">
+      <div class="col-3" id="profilrouter">
+        <ul id="routerlist">
+          <li id="paylasilan"><router-link class="btn btn-outline-secondary" to="/profil">Paylastiklarim</router-link></li>
+          <li id="paylasilan"><router-link class="btn btn-outline-secondary" to="/profil/etkinlikler">Etkinliklerim</router-link></li>
+        </ul>
+      </div>
+      <div class="col-9">
+        <router-view/>
+      </div>
     </div>
-    <router-view/>
   </div>
 </template>
 
 <script>
-import axios from "axios";
 import {mapGetters,mapActions} from 'vuex';
 export default {
   name: 'Profil',
   data () {
     return {
     }
+  },
+  mounted(){
+    this.kullaniciProfil();
   },
   computed: {
     ...mapGetters([
@@ -40,7 +46,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      'kullaniciCikis'
+      'kullaniciCikis',
+      'kullaniciProfil'
     ])
   },
 }

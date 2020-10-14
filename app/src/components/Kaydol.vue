@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import {mapGetters,mapActions} from 'vuex';
 export default {
   name: 'Kaydol',
   data () {
@@ -44,18 +44,18 @@ export default {
     }
   },
   methods:{
+    ...mapActions([
+      'kullaniciKaydol'
+    ]),
     kaydol(){
       if(this.email==='' || this.sifre===''){
         this.hata.durum = true;
         this.hata.mesaj = 'Lütfen tüm alanları doldurunuz!'
       } else {
-        axios.post("http://localhost:3000/kaydol",{email:this.email,sifre:this.sifre, nickname: this.nickname})
-        .then(veri =>{
-          this.$router.push('/');
-        })
-        .catch(error => {
-          this.hata.durum = true;
-          this.hata.mesaj = error.response.data.cevap;
+        this.kullaniciKaydol({
+          email:this.email,
+          sifre:this.sifre,
+          nickname:this.nickname
         });
       }
     }

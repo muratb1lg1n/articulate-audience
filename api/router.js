@@ -4,8 +4,24 @@ const Kullanici = require('./model/kullanici');
 const Paylasim = require('./model/paylasim');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 
+const girisKontrol = (req, res, next) => {
+    try {
+      const token = req.headers.authorization.replace("Bearer ", "");
+      const tokenVerisi = jwt.verify(token, 'murat12345', { expiresIn: 3600 });
+      req.kullanici = tokenVerisi;
+      next();
+    } catch (err) {
+      return res.status(401).json({
+        durum: false,
+        mesaj: "Token Oluşturulamadı!"
+      });
+    }
+  };
 
+//kullanıcı
 router.post('/giris', (req,res)=> {
     Kullanici.findOne({email:req.body.email}).then(kullanici=>{
         if(kullanici!==null){
@@ -39,8 +55,7 @@ router.post('/kaydol', (req,res)=> {
     var yeniKayit = new Kullanici({
         email: email,
         sifre: sifre,
-        nickname: nickname,
-
+        nickname: nickname
     });
     
     Kullanici.findOne({nickname:nickname}).then(nickname=>{
@@ -63,12 +78,31 @@ router.post('/kaydol', (req,res)=> {
                 cevap: "Bu kullanici adi zaten kayitli"
             })
         }
-    })
+    });
 });
 
-router.post('/paylasim', (req,res)=> {
+router.get('/profil',girisKontrol,(req,res)=> {
+    Kullanici.findOne({
+        _id:ObjectId(req.kullanici.kullanici._id)
+    }).then(profilBilgisi=>{
+        res.json({profilBilgisi});
+    });
+});
+
+router.get('/profilpaylasim',girisKontrol,(req,res)=> {
+    Paylasim.find({
+        user_id:ObjectId(req.kullanici.kullanici._id)
+    }).then(profilPaylasimlar=>{
+        res.json(profilPaylasimlar);
+    });
+});
+
+
+//paylaşım
+router.post('/paylasim',girisKontrol,(req,res)=> {
     var yeniPaylasim = new Paylasim({
-        icerik: req.body.icerik,
+        user_id: req.kullanici.kullanici._id,
+        icerik: req.body.icerik
     });
     yeniPaylasim.save().then(veri=>{
         res.json({cevap: 'Paylasim Basarili'});
@@ -77,13 +111,30 @@ router.post('/paylasim', (req,res)=> {
     });
 });
 
-router.get('/paylasim',(req, res)=>{
-    Paylasim.find().then(veriler => {
+router.get('/paylasim',girisKontrol,(req, res)=>{
+    Paylasim.aggregate([
+        {
+            $lookup:{
+                from:'kullanici',
+                localField:'user_id',
+                foreignField:'_id',
+                as:'kullaniciBilgisi'
+            }
+        },{
+            $project:{
+                kullaniciBilgisi:{
+                    sifre:0,
+                    email:0,
+                    user_id:0
+                }
+            }
+        }
+    ]).then(veriler => {
         res.json(veriler);
     })
 });
 
-router.delete('/paylasim/:id',(req,res)=>{
+router.delete('/paylasim/:id',girisKontrol,(req,res)=>{
     const id = req.params.id;
     Paylasim.deleteOne({_id: id}).then(veri=>{
         res.status(200).json({

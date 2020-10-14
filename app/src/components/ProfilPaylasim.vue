@@ -1,12 +1,15 @@
 <template>
-  <div class="container col-9">
-      <div class="col-9">
-        <div id="paylasimlist">
-          <ul>
-            <li v-for="paylasim in paylasimlar" :key="paylasim._id" id="paylasimel">
-              <p>{{paylasim.icerik}}</p>
-            </li>
-          </ul>
+  <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div id="paylasimlist">
+            <ul>
+              <li v-for="paylasim in kullaniciPaylasimlar" :key="paylasim._id">
+                {{paylasim.icerik}}<br>
+                <small><timeago :datetime="paylasim.tarih"></timeago></small>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
   </div>
@@ -18,35 +21,36 @@ import { mapGetters, mapActions} from 'vuex';
 export default {
   name: 'ProfilPaylasim',
   mounted(){
-    this.paylasimListele();
+    this.kullaniciProfilPaylasim();
   },
   computed: {
     ...mapGetters([
-      'paylasimlar'
+      'kullaniciPaylasimlar'
     ])
   },
   methods: {
     ...mapActions([
-      'paylasimListele'
+      'kullaniciProfilPaylasim'
     ])
   },
 }
 </script>
 
 <style scoped>
-
-.container{
-  float: right;
-  height: 390px;
-  overflow: scroll;
+ul{
+  padding: 0px;
+  margin: 0px;
 }
-#paylasimel{
-  list-style: none;
+li{
+  list-style-type: none;
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  padding: 10px;
+  cursor: pointer;
 }
-p{
-  border: 1px solid gray;
-  border-radius: 3px;
-  padding: 3px 1px 2px 13px;
+li:hover{
+  border: 1px solid #000;
+  background-color: #f9f9f9;
 }
-
 </style>

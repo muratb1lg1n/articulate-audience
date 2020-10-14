@@ -1,5 +1,9 @@
 const mongoose = require('mongoose');
 const paylasimSchema = new mongoose.Schema({
+    user_id:{
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+    },
     icerik:{
         type: String,
         required: true,
@@ -7,8 +11,7 @@ const paylasimSchema = new mongoose.Schema({
     tarih:{
         type: Date,
         default: Date.now(),
-        
-    },
+    }
 },
 {
     collection: 'paylasim'
