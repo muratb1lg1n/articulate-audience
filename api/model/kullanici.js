@@ -16,6 +16,7 @@ const kullaniciSchema = new mongoose.Schema({
     },
     aciklama:{
         type: String,
+        default: 'Burasi bos gozukuyor'
     },
     signupdate:{
         type: Date,

@@ -88,17 +88,16 @@ router.get('/profil',girisKontrol,(req,res)=> {
         res.json({profilBilgisi});
     });
 });
-router.post('/profil',girisKontrol,(req,res)=> {
-    var yeniAciklama = new Kullanici({
-        aciklama: req.body.aciklama
-    });
-    yeniAciklama.save().then(veri=>{
-        res.json({cevap: 'Aciklama Basarili'});
-    }).catch(err=>{
-        res.json({cevap:'Aciklama Basiriz'})
+router.put('/profil',girisKontrol,(req,res)=> {
+    Kullanici.findOne(
+        {_id: ObjectId(req.kullanici.kullanici._id)}
+    ).updateOne({$set:{'aciklama': req.body.aciklama}}, (err, result) => {
+      if(err) {
+        throw err;
+      }
+      res.send('user updated sucessfully');
     });
 });
-
 router.get('/profilpaylasim',girisKontrol,(req,res)=> {
     Paylasim.find({
         user_id:ObjectId(req.kullanici.kullanici._id)

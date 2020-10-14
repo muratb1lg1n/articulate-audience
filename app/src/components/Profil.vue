@@ -6,20 +6,23 @@
         <div id="kullaniciad">@{{kullanici.nickname}}</div>
       </div>
       <div class="col-7" id="profildetay">
-        <div id="aciklama">Aciklaman bos gozukuyor</div>
+        <div v-show="!durumacikla">{{kullanici.aciklama}}</div>
+        <textarea class="form-control" id="aciklama" v-model="aciklama" v-show="durumacikla" rows="5"></textarea>
         <div id="ilgispor">#tenis #basketbol #bilardo #bisiklet</div>
       </div>
        <div class="col-2" id="butonlar">
-        <button @click="aciklamaDegis" class="btn btn-info float-right">Aciklamani Duzenle</button>
-        <button @click="kullaniciCikis" class="btn btn-danger float-right">Çıkış Yap</button>
+        <button @click="durumacikla = true" class="btn float-right" v-show="!durumacikla">Aciklamani Duzenle</button>
+        <button @click="aciklamaDegis(aciklama)" class="btn float-right" v-show="durumacikla">Kaydet</button>
+        <button @click="durumacikla = false" class="btn float-right" v-show="durumacikla">Vazgec</button>
+        <button @click="kullaniciCikis" class="btn float-right" id="cikisbtn">Çıkış Yap</button>
       </div>
     </div>
     <hr id="line">
     <div class="row">
       <div class="col-3" id="profilrouter">
         <ul id="routerlist">
-          <li id="paylasilan"><router-link class="btn btn-outline-secondary" to="/profil">Paylastiklarim</router-link></li>
-          <li id="paylasilan"><router-link class="btn btn-outline-secondary" to="/profil/etkinlikler">Etkinliklerim</router-link></li>
+          <li id="paylasilan"><router-link class="btn" to="/profil">Paylastiklarim</router-link></li>
+          <li id="paylasilan"><router-link class="btn" to="/profil/etkinlikler">Etkinliklerim</router-link></li>
         </ul>
       </div>
       <div class="col-9">
@@ -35,6 +38,8 @@ export default {
   name: 'Profil',
   data () {
     return {
+      aciklama:'',
+      durumacikla: false,
     }
   },
   mounted(){
@@ -72,9 +77,12 @@ export default {
   float: right;
   max-width: 700px;
 }
+textarea{
+  resize: none;
+}
 #line{
   margin-top: 10px;
-  background-color: #4C9900;
+  background-color: #812da8;
   height: 1px;
 }
 ul{
@@ -87,10 +95,20 @@ li{
   text-align: center;
 }
 .btn{
-  width: 130px;
+  width: 180px;
+  color:#812da8;
+  border: #812da8 1px solid;
+  border-radius: 8px;
+  margin-bottom: 10px;
 }
-.btn:focus{
-  border-color: greenyellow;
+.btn:hover{
+  background: #812da8;
+  color: white;
+  font-weight: bold;
+}
+#cikisbtn{
+  background: #812da8;
+  color: white;
 }
 
 </style>

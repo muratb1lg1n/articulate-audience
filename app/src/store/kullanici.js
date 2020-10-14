@@ -53,7 +53,10 @@ const actions = {
         });
     },
     async aciklamaDegis({commit}, veri){
-        api.post()
+        api.put("profil",{aciklama: veri})
+        .then(veri =>{
+            commit('KULLANICI', veri.data.profilBilgisi)
+        })
     },
     async kullaniciCikis({commit}, veri){
         await localStorage.removeItem('token');

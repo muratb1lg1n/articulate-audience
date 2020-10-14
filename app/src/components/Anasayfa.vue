@@ -50,8 +50,6 @@ export default {
 li{
   list-style: none;
 }
-
-
 #rect{
   width: 100px;
   height: 40px;
@@ -62,7 +60,8 @@ li{
   align-items: center;
 }
 #rect:hover{
-  background: rgba(196, 196, 196, 0.7);
+  color: #812da8;
+  background: white;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
