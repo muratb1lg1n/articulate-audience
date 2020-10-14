@@ -14,6 +14,7 @@
       </div>
     </div>
     <hr id="line">
+<<<<<<< HEAD
     <div class="row">
       <div class="col-3" id="profilrouter">
         <ul id="routerlist">
@@ -24,6 +25,13 @@
       <div class="col-9">
         <router-view/>
       </div>
+=======
+    <div class="col-3" id="profilrouter">
+      <ul class="col-3" id="routerlist">
+        <li id="paylasilan"><router-link class="btn btn-outline-secondary" to="/profil">Paylastiklarim</router-link></li>
+        <li id="paylasilan"><router-link class="btn btn-outline-secondary" to="/profil/etkinlikler">Etkinliklerim</router-link></li>
+      </ul>
+>>>>>>> a4ab19671b0b0bed4f71335b6138129659495e54
     </div>
   </div>
 </template>
