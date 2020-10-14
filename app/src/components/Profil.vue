@@ -13,7 +13,7 @@
         <div id="ilgispor">#tenis #basketbol #bilardo #bisiklet</div>
       </div>
     </div>
-    <div class="col-12" id='line'></div>
+    <hr id="line">
     <div class="col-3" id="profilrouter">
       <ul class="col-3" id="routerlist">
         <li id="paylasilan"><router-link class="btn btn-outline-secondary" to="/profil">Paylastiklarim</router-link></li>
