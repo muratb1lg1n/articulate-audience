@@ -14,6 +14,9 @@ const kullaniciSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    aciklama:{
+        type: String,
+    },
     signupdate:{
         type: Date,
         default: Date.now(),

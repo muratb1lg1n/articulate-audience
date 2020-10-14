@@ -88,6 +88,16 @@ router.get('/profil',girisKontrol,(req,res)=> {
         res.json({profilBilgisi});
     });
 });
+router.post('/profil',girisKontrol,(req,res)=> {
+    var yeniAciklama = new Kullanici({
+        aciklama: req.body.aciklama
+    });
+    yeniAciklama.save().then(veri=>{
+        res.json({cevap: 'Aciklama Basarili'});
+    }).catch(err=>{
+        res.json({cevap:'Aciklama Basiriz'})
+    });
+});
 
 router.get('/profilpaylasim',girisKontrol,(req,res)=> {
     Paylasim.find({

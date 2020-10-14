@@ -2,7 +2,8 @@ import api from './api';
 
 const state = {
     kullanici: {
-        nickname:''
+        nickname:'',
+        aciklama:''
     },
     kullaniciPaylasimlar: []
 };
@@ -50,6 +51,9 @@ const actions = {
         .then(veri =>{
             commit('KULLANICI_PAYLASIM',veri.data);
         });
+    },
+    async aciklamaDegis({commit}, veri){
+        api.post()
     },
     async kullaniciCikis({commit}, veri){
         await localStorage.removeItem('token');
