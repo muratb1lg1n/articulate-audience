@@ -7,7 +7,7 @@
       </div>
       <div class="col-7" id="profildetay">
         <div v-show="!durumacikla">{{kullanici.aciklama}}</div>
-        <textarea class="form-control" id="aciklama" v-model="aciklama" v-show="durumacikla" rows="5"></textarea>
+        <textarea class="form-control" id="aciklama" v-model="aciklama" v-show="durumacikla" :placeholder="kullanici.aciklama" rows="5"></textarea>
         <div id="ilgispor">#tenis #basketbol #bilardo #bisiklet</div>
       </div>
        <div class="col-2" id="butonlar">
