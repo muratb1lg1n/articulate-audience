@@ -1,12 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Giris from '@/components/Giris'
-import Kaydol from '@/components/Kaydol'
-import Anasayfa from '@/components/Anasayfa'
-import Paylasim from '@/components/Paylasim'
-import Profil from '@/components/Profil'
-import ProfilPaylasim from '@/components/ProfilPaylasim'
-import ProfilEtkinlik from '@/components/ProfilEtkinlik'
+import Login from '@/components/Login'
+import Signup from '@/components/Signup'
+import Navbar from '@/components/Navbar'
+import Homepage from '@/components/Homepage'
+import Profile from '@/components/Profile'
+import ProfilePost from '@/components/ProfilePost'
 
 Vue.use(Router)
 
@@ -15,34 +14,31 @@ const router = new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/giris',
-      component: Giris,
+      path: '/login',
+      component: Login,
     },
     {
-      path: '/kaydol',
-      component: Kaydol,
+      path: '/signup',
+      component: Signup,
     },
     {
       path: '/',
-      name: Anasayfa,
-      component: Anasayfa,
+      name: Navbar,
+      component: Navbar,
       meta: { requiresAuth: true },
       children:[
         {
           path: '/',
-          component: Paylasim
+          component: Homepage
         },
+
         {
-          path: '/profil',
-          component: Profil,
+          path: '/profile',
+          component: Profile,
           children: [
             {
-              path: '/profil/',
-              component: ProfilPaylasim
-            },
-            {
-              path: '/profil/etkinlikler',
-              component: ProfilEtkinlik
+              path: '/profile',
+              component: ProfilePost
             }
           ]
         }
@@ -55,7 +51,7 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (localStorage.getItem("token") == null) {
       next({
-        path: "/giris"
+        path: "/login"
       });
     } else {
       next();

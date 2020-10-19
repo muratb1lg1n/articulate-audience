@@ -1,9 +1,9 @@
 <template>
-  <div id="giris">
-    <div class="container mt-5">
-      <div class="row">
+  <div id="kaydol">
+    <div class="container">
+      <div class="row ">
         <div class="col-12">
-          <h1>Giriş</h1>
+          <h1>Kaydol</h1>
           <div v-show="hata.durum" class="alert alert-danger" role="alert">
             {{hata.mesaj}}
           </div>
@@ -15,10 +15,13 @@
           <input type="text" class="form-control" v-model="sifre" placeholder="Şifre">
         </div>
         <div class="col-12">
-          <button class="btn btn-success btn-block" @click="girisYap()">Giriş</button>
+          <input type="text" class="form-control" v-model="nickname" placeholder="Kullanici Adi">
         </div>
-        <div class="col-12 mt-3 text-center">
-          <router-link to="/kaydol">Hesabin yok mu? Hemen bir tane olustur!</router-link>
+        <div class="col-12">
+          <button class="btn btn-success btn-block" @click="kaydol()">Kaydol</button>
+        </div>
+        <div class="col-12 mt-3" style="text-align: center;">
+          <router-link to="/giris">Zaten bir hesabin var mi? Giris yap!</router-link>
         </div>
       </div>
     </div>
@@ -28,32 +31,32 @@
 <script>
 import {mapGetters,mapActions} from 'vuex';
 export default {
-  name: 'Giris',
+  name: 'Signup',
   data () {
     return {
       email: '',
       sifre: '',
+      nickname: '',
       hata:{
         durum: false,
         mesaj: ''
       }
     }
   },
-  computed: {
-    ...mapGetters([
-      'kullanici'
-    ])
-  },
-  methods: {
+  methods:{
     ...mapActions([
-      'kullaniciGiris'
+      'kullaniciKaydol'
     ]),
-    girisYap(){
+    kaydol(){
       if(this.email==='' || this.sifre===''){
         this.hata.durum = true;
         this.hata.mesaj = 'Lütfen tüm alanları doldurunuz!'
       } else {
-        this.kullaniciGiris({'email':this.email,'sifre':this.sifre})
+        this.kullaniciKaydol({
+          email:this.email,
+          sifre:this.sifre,
+          nickname:this.nickname
+        });
       }
     }
   },
@@ -61,9 +64,9 @@ export default {
 </script>
 
 <style scoped>
-  #giris{
+#kaydol{
     height: 100vh;
-    background: url('../assets/peloton.jpg') no-repeat center center fixed; 
+    background: url('../assets/serve.jpg') no-repeat center top fixed; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -76,7 +79,7 @@ export default {
     border-radius: 20px;
     padding: 50px 30px 70px 30px;
   }
-  input{
-    margin-bottom: 10px;
-  }
+input{
+  margin-bottom: 10px;
+}
 </style>

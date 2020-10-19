@@ -19,7 +19,7 @@
 import { mapGetters, mapActions} from 'vuex';
 
 export default {
-  name: 'ProfilPaylasim',
+  name: 'ProfilePost',
   mounted(){
     this.kullaniciProfilPaylasim();
   },

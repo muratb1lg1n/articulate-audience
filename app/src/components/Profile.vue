@@ -21,8 +21,7 @@
     <div class="row">
       <div class="col-3" id="profilrouter">
         <ul id="routerlist">
-          <li id="paylasilan"><router-link class="btn" to="/profil">Paylastiklarim</router-link></li>
-          <li id="paylasilan"><router-link class="btn" to="/profil/etkinlikler">Etkinliklerim</router-link></li>
+          <li id="paylasilan"><router-link class="btn" to="/profile">Paylastiklarim</router-link></li>
         </ul>
       </div>
       <div class="col-9">
@@ -33,9 +32,11 @@
 </template>
 
 <script>
+
 import {mapGetters,mapActions} from 'vuex';
+
 export default {
-  name: 'Profil',
+  name: 'Profile',
   data () {
     return {
       aciklama:'',

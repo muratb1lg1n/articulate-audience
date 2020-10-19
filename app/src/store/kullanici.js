@@ -60,7 +60,7 @@ const actions = {
     },
     async kullaniciCikis({commit}, veri){
         await localStorage.removeItem('token');
-        window.location = await '/giris';
+        window.location = await '/login';
     }
 };
 

@@ -2,18 +2,17 @@
   <div class="container">
     <div class="row mt-5">
       <div class="col-12">
-        <h4>Bir Şeyler Paylaş!</h4>
+        <h4>Post something!</h4>
         <textarea v-model="icerik" class="form-control" rows="5"></textarea>
-        <button @click="paylasimEkle(icerik)" class="btn float-right mt-4">Gönder</button>
+        <button @click="paylasimEkle(icerik)" class="btn float-right mt-4">Post</button>
       </div>
       <div class="col-12 mb-5">
-        <h4>Bugün Paylaşılanlar</h4>
+        <h4>Posted Earlier</h4>
           <ul>
             <li v-for="paylasim in paylasimlar" :key="paylasim._id">
-              <button @click="paylasimSil(paylasim)" class="btn float-right" id="silbtn">sil</button>
+              <button @click="paylasimSil(paylasim)" class="btn float-right" id="dltbtn">X</button>
               {{paylasim.icerik}}<br>
               {{paylasim.kullaniciBilgisi[0].nickname}}
-
             </li>
           </ul>
       </div>
@@ -22,9 +21,11 @@
 </template>
 
 <script>
+
 import {mapGetters,mapActions} from 'vuex';
+
 export default {
-  name: 'Paylasim',
+  name: 'Homepage',
   data () {
     return {
       icerik:''
@@ -76,7 +77,7 @@ li{
   color: white;
   font-weight: bold;
 }
-#silbtn{
+#dltbtn{
   width: 42px;
   vertical-align: top;
 }

@@ -8,6 +8,11 @@ const getters = {
     paylasimlar(state){
         return state.paylasimlar;
     },
+    paylasimlarID(state){
+        (id) => {
+            return state.paylasimlar.find(paylasimlar => paylasimlar.id === id)
+        }
+    }
 };
 
 const mutations = {
