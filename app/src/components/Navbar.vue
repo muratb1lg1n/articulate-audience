@@ -28,13 +28,12 @@ import {mapGetters,mapActions} from 'vuex';
 
 export default {
   name: 'Navbar',
-  data () {
-    return {
-    }
-  }
 }
+
 </script>
+
 <style scoped>
+
 .navbar{
   background-color: #812da8;
   line-height: 2;

@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt')
 
-const kullaniciSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     email:{
         type: String,
         required: true,
     },
-    sifre:{
+    password:{
         type: String,
         required: true
     },
@@ -14,9 +14,9 @@ const kullaniciSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    aciklama:{
+    description:{
         type: String,
-        default: 'Burasi bos gozukuyor'
+        default: 'Your description looks empty.'
     },
     signupdate:{
         type: Date,
@@ -24,12 +24,12 @@ const kullaniciSchema = new mongoose.Schema({
     }
 },
 {
-    collection: 'kullanici'
+    collection: 'user'
 })
 
-kullaniciSchema.pre('save', async function(next){
-    const kullanici = this;
-    kullanici.sifre = await bcrypt.hash(kullanici.sifre, 8);
+userSchema.pre('save', async function(next){
+    const user = this;
+    user.password = await bcrypt.hash(user.password, 8);
     next();
 })
-module.exports = mongoose.model('Kullanici',kullaniciSchema);
+module.exports = mongoose.model('User', userSchema);

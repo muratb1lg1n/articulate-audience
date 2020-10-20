@@ -1,27 +1,27 @@
 <template>
-  <div id="kaydol">
+  <div id="signup">
     <div class="container">
       <div class="row ">
         <div class="col-12">
-          <h1>Kaydol</h1>
-          <div v-show="hata.durum" class="alert alert-danger" role="alert">
-            {{hata.mesaj}}
+          <h1>Signup</h1>
+          <div v-show="err.showdes" class="alert alert-danger" role="alert">
+            {{err.showdes}}
           </div>
         </div>
         <div class="col-12">
           <input type="text" class="form-control" v-model="email" placeholder="Email">
         </div>
         <div class="col-12">
-          <input type="text" class="form-control" v-model="sifre" placeholder="Şifre">
+          <input type="text" class="form-control" v-model="password" placeholder="Password">
         </div>
         <div class="col-12">
-          <input type="text" class="form-control" v-model="nickname" placeholder="Kullanici Adi">
+          <input type="text" class="form-control" v-model="nickname" placeholder="Nickname">
         </div>
         <div class="col-12">
-          <button class="btn btn-success btn-block" @click="kaydol()">Kaydol</button>
+          <button class="btn btn-success btn-block" @click="signup()">Sign Up</button>
         </div>
         <div class="col-12 mt-3" style="text-align: center;">
-          <router-link to="/giris">Zaten bir hesabin var mi? Giris yap!</router-link>
+          Already have an account? <router-link to="/login">Log in!</router-link>
         </div>
       </div>
     </div>
@@ -35,27 +35,27 @@ export default {
   data () {
     return {
       email: '',
-      sifre: '',
+      password: '',
       nickname: '',
-      hata:{
-        durum: false,
-        mesaj: ''
+      err:{
+        showdes: false,
+        msg: ''
       }
     }
   },
   methods:{
     ...mapActions([
-      'kullaniciKaydol'
+      'userSignup'
     ]),
-    kaydol(){
-      if(this.email==='' || this.sifre===''){
-        this.hata.durum = true;
-        this.hata.mesaj = 'Lütfen tüm alanları doldurunuz!'
+    signup(){
+      if(this.email==='' || this.password===''){
+        this.err.showdes = true;
+        this.err.msg = 'Please fill all the fields!'
       } else {
-        this.kullaniciKaydol({
-          email:this.email,
-          sifre:this.sifre,
-          nickname:this.nickname
+        this.userSignup({
+          email: this.email,
+          password: this.password,
+          nickname: this.nickname
         });
       }
     }
@@ -64,7 +64,7 @@ export default {
 </script>
 
 <style scoped>
-#kaydol{
+#signup{
     height: 100vh;
     background: url('../assets/serve.jpg') no-repeat center top fixed; 
     -webkit-background-size: cover;

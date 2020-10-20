@@ -19,16 +19,16 @@ app.use(bodyParser.json());
 app.use('/',router);
 
 //veri tabanı bağlantısı
-const vtOzellikleri = {
+const vtSpecifics = {
     keepAlive: 1,
     useUnifiedTopology: true,
     useNewUrlParser: true,
 }
 
-mongoose.connect(url ,vtOzellikleri).then(()=>{
-    console.log('DB Başarılı');
+mongoose.connect(url ,vtSpecifics).then(()=>{
+    console.log('DB Successful');
 }).catch((err)=>{
-    console.log(`DB Hatalı: ${err.message}`);
+    console.log(`DB Failed: ${err.message}`);
 });
 
 //server ayaga kaldir

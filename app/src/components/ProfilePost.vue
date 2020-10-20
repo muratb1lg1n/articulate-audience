@@ -2,11 +2,11 @@
   <div class="container">
       <div class="row">
         <div class="col-12">
-          <div id="paylasimlist">
+          <div>
             <ul>
-              <li v-for="paylasim in kullaniciPaylasimlar" :key="paylasim._id">
-                {{paylasim.icerik}}<br>
-                <small><timeago :datetime="paylasim.tarih"></timeago></small>
+              <li v-for="post in userPosts" :key="post._id">
+                {{post.post}}<br>
+                <small><timeago :datetime="post.date"></timeago></small>
               </li>
             </ul>
           </div>
@@ -16,27 +16,29 @@
 </template>
 
 <script>
+
 import { mapGetters, mapActions} from 'vuex';
 
 export default {
   name: 'ProfilePost',
   mounted(){
-    this.kullaniciProfilPaylasim();
+    this.userProfilePost();
   },
   computed: {
     ...mapGetters([
-      'kullaniciPaylasimlar'
+      'userPosts'
     ])
   },
   methods: {
     ...mapActions([
-      'kullaniciProfilPaylasim'
+      'userProfilePost'
     ])
   },
 }
 </script>
 
 <style scoped>
+
 ul{
   padding: 0px;
   margin: 0px;
@@ -53,4 +55,5 @@ li:hover{
   border: 1px solid #000;
   background-color: #f9f9f9;
 }
+
 </style>

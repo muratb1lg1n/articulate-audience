@@ -1,106 +1,106 @@
 const express = require("express");
 const router = express.Router();
-const Kullanici = require('./model/kullanici');
-const Paylasim = require('./model/paylasim');
+const User = require('./model/user');
+const Post = require('./model/post');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 
-const girisKontrol = (req, res, next) => {
+const loginCheck = (req, res, next) => {
     try {
       const token = req.headers.authorization.replace("Bearer ", "");
-      const tokenVerisi = jwt.verify(token, 'murat12345', { expiresIn: 3600 });
-      req.kullanici = tokenVerisi;
+      const tokenData = jwt.verify(token, 'murat12345', { expiresIn: 3600 });
+      req.user = tokenData;
       next();
     } catch (err) {
       return res.status(401).json({
-        durum: false,
-        mesaj: "Token Oluşturulamadı!"
+        success: false,
+        mesaj: "Token couldn't created!"
       });
     }
   };
 
 //kullanıcı
-router.post('/giris', (req,res)=> {
-    Kullanici.findOne({email:req.body.email}).then(kullanici=>{
-        if(kullanici!==null){
-            bcrypt.compare(req.body.sifre,kullanici.sifre).then(eslesme=>{
-                if(!eslesme){
+router.post('/login', (req,res)=> {
+    User.findOne({email:req.body.email}).then(user=>{
+        if(user!==null){
+            bcrypt.compare(req.body.password,user.password).then(match=>{
+                if(!match){
                     res.status(401).json({
                         success: false,
-                        cevap: 'Hatalı email veya şifre!'
+                        response: 'False email or password!'
                     });
                 } else {
-                    const token = jwt.sign({kullanici}, 'murat12345', {expiresIn: 3600});
+                    const token = jwt.sign({user}, 'murat12345', {expiresIn: 3600});
                     res.status(200).json({
                         token: token,
-                        cevap: 'Giriş başarılı!'
+                        response: 'Login successful!'
                     });
                 }
             });
         } else {
-            res.status(401).json({cevap:'Hatalı email veya şifre!'});
+            res.status(401).json({response:'False email or password!'});
         }
     }).catch(err=>{
-        res.status(500).json({cevap:'Giriş başarısız!'});
+        res.status(500).json({response:'Login failed!'});
     });
 });
 
-router.post('/kaydol', (req,res)=> {
+router.post('/signup', (req,res)=> {
     const email = req.body.email;
-    const sifre = req.body.sifre;
+    const password = req.body.password;
     const nickname = req.body.nickname;
 
-    var yeniKayit = new Kullanici({
+    var newUser = new User({
         email: email,
-        sifre: sifre,
+        password: password,
         nickname: nickname
     });
     
-    Kullanici.findOne({nickname:nickname}).then(nickname=>{
+    User.findOne({nickname:nickname}).then(nickname=>{
         if(nickname === null){
-            Kullanici.findOne({email:email}).then(email=>{
+            User.findOne({email:email}).then(email=>{
                 if(email === null){
-                    yeniKayit.save().then(veri=>{
-                        res.json({cevap:'Kayıt başarılı!'});
+                    newUser.save().then(data=>{
+                        res.json({response:'Login successful!'});
                     }).catch(err=>{
-                        res.json({cevap:'Kayıt başarısız!'});
+                        res.json({response:'Login failed!'});
                     });
                 }else{
                     res.status(400).json({
-                        cevap: "Bu email zaten kayitli"
+                        response: "This email is already registered!"
                     })
                 }
             })
         }else{
             res.status(400).json({
-                cevap: "Bu kullanici adi zaten kayitli"
+                response: "This nickname is already registered!"
             })
         }
     });
 });
 
-router.get('/profil',girisKontrol,(req,res)=> {
-    Kullanici.findOne({
-        _id:ObjectId(req.kullanici.kullanici._id)
+router.get('/profile',loginCheck,(req,res)=> {
+    User.findOne({
+        _id:ObjectId(req.user.user._id)
     }).then(profilBilgisi=>{
         res.json({profilBilgisi});
     });
 });
-router.put('/profil',girisKontrol,(req,res)=> {
-    Kullanici.findOne(
-        {_id: ObjectId(req.kullanici.kullanici._id)}
-    ).updateOne({$set:{'aciklama': req.body.aciklama}}, (err, result) => {
+router.put('/profile',loginCheck,(req,res)=> {
+    User.findOne(
+        {_id: ObjectId(req.user.user._id)}
+    ).updateOne({$set:{'description': req.body.description}}, (err, result) => {
       if(err) {
         throw err;
       }
       res.send('user updated sucessfully');
     });
 });
-router.get('/profilpaylasim',girisKontrol,(req,res)=> {
-    Paylasim.find({
-        user_id:ObjectId(req.kullanici.kullanici._id)
+router.get('/profilepost',loginCheck,(req,res)=> {
+    Post.find({
+        user_id:ObjectId(req.user.user._id)
     }).then(profilPaylasimlar=>{
         res.json(profilPaylasimlar);
     });
@@ -108,31 +108,31 @@ router.get('/profilpaylasim',girisKontrol,(req,res)=> {
 
 
 //paylaşım
-router.post('/paylasim',girisKontrol,(req,res)=> {
-    var yeniPaylasim = new Paylasim({
-        user_id: req.kullanici.kullanici._id,
-        icerik: req.body.icerik
+router.post('/post',loginCheck,(req,res)=> {
+    var newPost = new Post({
+        user_id: req.user.user._id,
+        post: req.body.post
     });
-    yeniPaylasim.save().then(veri=>{
-        res.json({cevap: 'Paylasim Basarili'});
+    newPost.save().then(data=>{
+        res.json({response: 'Paylasim Basarili'});
     }).catch(err=>{
-        res.json({cevap:'Paylasim Basiriz'})
+        res.json({response:'Paylasim Basiriz'})
     });
 });
 
-router.get('/paylasim',girisKontrol,(req, res)=>{
-    Paylasim.aggregate([
+router.get('/post',loginCheck,(req, res)=>{
+    Post.aggregate([
         {
             $lookup:{
-                from:'kullanici',
+                from:'user',
                 localField:'user_id',
                 foreignField:'_id',
-                as:'kullaniciBilgisi'
+                as:'userInfo'
             }
         },{
             $project:{
-                kullaniciBilgisi:{
-                    sifre:0,
+                userInfo:{
+                    password:0,
                     email:0,
                     user_id:0
                 }
@@ -143,9 +143,9 @@ router.get('/paylasim',girisKontrol,(req, res)=>{
     })
 });
 
-router.delete('/paylasim/:id',girisKontrol,(req,res)=>{
+router.delete('/post/:id',loginCheck,(req,res)=>{
     const id = req.params.id;
-    Paylasim.deleteOne({_id: id}).then(veri=>{
+    Post.deleteOne({_id: id}).then(data=>{
         res.status(200).json({
             mesaj: 'Site başarıyla silindi!'
         });

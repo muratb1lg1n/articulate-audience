@@ -1,27 +1,26 @@
 <template>
   <div class="container">
     <div class="row mt-5">
-      <div class="col-3" id="profilresim">
+      <div class="col-3">
         <div id="circle"></div>
-        <div id="kullaniciad">@{{kullanici.nickname}}</div>
+        <div id="username">@{{user.nickname}}</div>
       </div>
-      <div class="col-7" id="profildetay">
-        <div v-show="!durumacikla">{{kullanici.aciklama}}</div>
-        <textarea class="form-control" id="aciklama" v-model="aciklama" v-show="durumacikla" :placeholder="kullanici.aciklama" rows="5"></textarea>
-        <div id="ilgispor">#tenis #basketbol #bilardo #bisiklet</div>
+      <div class="col-7" id="profiledetail">
+        <div v-show="!enterdes">{{user.description}}</div>
+        <textarea class="form-control" v-model="description" v-show="enterdes" :placeholder="user.description" rows="5"></textarea>
       </div>
-       <div class="col-2" id="butonlar">
-        <button @click="durumacikla = true" class="btn float-right" v-show="!durumacikla">Aciklamani Duzenle</button>
-        <button @click="aciklamaDegis(aciklama)" class="btn float-right" v-show="durumacikla">Kaydet</button>
-        <button @click="durumacikla = false" class="btn float-right" v-show="durumacikla">Vazgec</button>
-        <button @click="kullaniciCikis" class="btn float-right" id="cikisbtn">Çıkış Yap</button>
+       <div class="col-2">
+        <button @click="enterdes = true" class="btn float-right" v-show="!enterdes">Edit Description</button>
+        <button @click="descriptionUpdate(description)" class="btn float-right" v-show="enterdes">Save</button>
+        <button @click="enterdes = false" class="btn float-right" v-show="enterdes">Cancel</button>
+        <button @click="userLogout" class="btn float-right" id="extbtn">Logout</button>
       </div>
     </div>
     <hr id="line">
     <div class="row">
-      <div class="col-3" id="profilrouter">
-        <ul id="routerlist">
-          <li id="paylasilan"><router-link class="btn" to="/profile">Paylastiklarim</router-link></li>
+      <div class="col-3">
+        <ul>
+          <li><router-link class="btn" to="/profile">My Posts</router-link></li>
         </ul>
       </div>
       <div class="col-9">
@@ -39,26 +38,27 @@ export default {
   name: 'Profile',
   data () {
     return {
-      aciklama:'',
-      durumacikla: false,
+      description: '',
+      enterdes: false,
     }
   },
   mounted(){
-    this.kullaniciProfil();
+    this.userProfile();
   },
   computed: {
     ...mapGetters([
-      'kullanici'
+      'user'
     ])
   },
   methods: {
     ...mapActions([
-      'kullaniciCikis',
-      'kullaniciProfil',
-      'aciklamaDegis'
+      'userLogout',
+      'userProfile',
+      'descriptionUpdate'
     ])
   },
 }
+
 </script>
 
 <style scoped>
@@ -70,11 +70,11 @@ export default {
   background-color: grey;
   margin: 0 auto;
 }
-#kullaniciad{
+#username{
   text-align: center;
   margin-top: 7px;
 }
-#profildetay{
+#profiledetail{
   float: right;
   max-width: 700px;
 }
@@ -107,7 +107,7 @@ li{
   color: white;
   font-weight: bold;
 }
-#cikisbtn{
+#extbtn{
   background: #812da8;
   color: white;
 }

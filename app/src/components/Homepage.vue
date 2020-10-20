@@ -3,16 +3,16 @@
     <div class="row mt-5">
       <div class="col-12">
         <h4>Post something!</h4>
-        <textarea v-model="icerik" class="form-control" rows="5"></textarea>
-        <button @click="paylasimEkle(icerik)" class="btn float-right mt-4">Post</button>
+        <textarea v-model="post" class="form-control" rows="5"></textarea>
+        <button @click="postAdding(post)" class="btn float-right mt-4">Post</button>
       </div>
       <div class="col-12 mb-5">
         <h4>Posted Earlier</h4>
           <ul>
-            <li v-for="paylasim in paylasimlar" :key="paylasim._id">
-              <button @click="paylasimSil(paylasim)" class="btn float-right" id="dltbtn">X</button>
-              {{paylasim.icerik}}<br>
-              {{paylasim.kullaniciBilgisi[0].nickname}}
+            <li v-for="post in posts" :key="post._id">
+              <button @click="postDelete(post)" class="btn float-right" id="dltbtn">X</button>
+              {{post.post}}<br>
+              {{post.userInfo[0].nickname}}
             </li>
           </ul>
       </div>
@@ -28,25 +28,26 @@ export default {
   name: 'Homepage',
   data () {
     return {
-      icerik:''
+      post:''
     }
   },
   mounted(){
-    this.paylasimListele();
+    this.postListing();
   },
   computed: {
     ...mapGetters([
-      'paylasimlar'
+      'posts'
     ])
   },
   methods: {
     ...mapActions([
-      'paylasimListele',
-      'paylasimEkle',
-      'paylasimSil'
+      'postListing',
+      'postAdding',
+      'postDelete'
     ])
   },
 }
+
 </script>
 
 <style scoped>

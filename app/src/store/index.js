@@ -1,13 +1,13 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import kullanici from './kullanici';
-import paylasim from './paylasim';
+import user from './user';
+import post from './post';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
-    kullanici,
-    paylasim
+    user,
+    post
   }
 })

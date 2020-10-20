@@ -1,20 +1,21 @@
 const mongoose = require('mongoose');
-const paylasimSchema = new mongoose.Schema({
+
+const postSchema = new mongoose.Schema({
     user_id:{
         type: mongoose.Schema.Types.ObjectId,
         required: true,
     },
-    icerik:{
+    post:{
         type: String,
         required: true,
     },
-    tarih:{
+    date:{
         type: Date,
         default: Date.now(),
     }
 },
 {
-    collection: 'paylasim'
+    collection: 'post'
 })
 
-module.exports = mongoose.model('Paylasim',paylasimSchema);
+module.exports = mongoose.model('Post', postSchema);

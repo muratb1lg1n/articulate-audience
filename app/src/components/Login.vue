@@ -1,24 +1,24 @@
 <template>
-  <div id="giris">
+  <div id="login" v-show="loaded">
     <div class="container mt-5">
       <div class="row">
         <div class="col-12">
           <h1>Login</h1>
-          <div v-show="hata.durum" class="alert alert-danger" role="alert">
-            {{hata.mesaj}}
+          <div v-show="err.show" class="alert alert-danger" role="alert">
+            {{err.msg}}
           </div>
         </div>
         <div class="col-12">
           <input type="text" class="form-control" v-model="email" placeholder="Email">
         </div>
         <div class="col-12">
-          <input type="text" class="form-control" v-model="sifre" placeholder="Password">
+          <input type="text" class="form-control" v-model="password" placeholder="Password">
         </div>
         <div class="col-12">
-          <button class="btn btn-success btn-block" @click="girisYap()">Login</button>
+          <button class="btn btn-success btn-block" @click="login()">Login</button>
         </div>
         <div class="col-12 mt-3 text-center">
-          If you don't have account, <router-link to="/kaydol">Create One!</router-link>
+          If you don't have account, <router-link to="/signup">Create One!</router-link>
         </div>
       </div>
     </div>
@@ -34,36 +34,42 @@ export default {
   data () {
     return {
       email: '',
-      sifre: '',
-      hata:{
-        durum: false,
-        mesaj: ''
-      }
+      password: '',
+      err:{
+        show: false,
+        msg: ''
+      },
+      loaded: false
     }
   },
   computed: {
     ...mapGetters([
-      'kullanici'
+      'user'
     ])
   },
   methods: {
     ...mapActions([
-      'kullaniciGiris'
+      'userLogin'
     ]),
-    girisYap(){
-      if(this.email==='' || this.sifre===''){
-        this.hata.durum = true;
-        this.hata.mesaj = 'Lütfen tüm alanları doldurunuz!'
+    login(){
+      if(this.email==='' || this.password===''){
+        this.err.show = true;
+        this.err.msg = 'Please fill all the fields!'
       } else {
-        this.kullaniciGiris({'email':this.email,'sifre':this.sifre})
+        this.userLogin({'email':this.email,'password':this.password})
       }
     }
   },
+  mounted(){
+    this.loaded = true;
+  }
 }
+
 </script>
 
 <style scoped>
-  #giris{
+
+  #login{
     height: 100vh;
     background: url('../assets/peloton.jpg') no-repeat center center fixed; 
     -webkit-background-size: cover;
@@ -81,4 +87,5 @@ export default {
   input{
     margin-bottom: 10px;
   }
+
 </style>
