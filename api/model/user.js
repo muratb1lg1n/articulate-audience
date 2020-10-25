@@ -21,6 +21,9 @@ const userSchema = new mongoose.Schema({
     signupdate:{
         type: Date,
         default: Date.now(),
+    },
+    photo:{
+        type:String
     }
 },
 {

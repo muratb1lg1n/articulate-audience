@@ -1,11 +1,15 @@
 const express = require("express");
 const router = express.Router();
+
 const User = require('./model/user');
 const Post = require('./model/post');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
+const multer  = require('multer');
+const uuid = require('uuid');
+
 
 const loginCheck = (req, res, next) => {
     try {
@@ -20,6 +24,17 @@ const loginCheck = (req, res, next) => {
       });
     }
   };
+
+  const storage = multer.diskStorage({
+    destination : function(req,file,callback){
+        callback(null, './public/userPhotos/');
+    },
+    filename: function(req,file,callback){
+        callback(null, uuid.v4());
+    }
+  });
+  const upload = multer({ storage : storage});
+
 
 //kullanıcı
 router.post('/login', (req,res)=> {
@@ -103,6 +118,16 @@ router.get('/profilepost',loginCheck,(req,res)=> {
         user_id:ObjectId(req.user.user._id)
     }).then(profilPaylasimlar=>{
         res.json(profilPaylasimlar);
+    });
+});
+router.post('/photoupdate',[loginCheck,upload.single('userPhoto')],(req,res)=> {
+    User.findOne(
+        {_id: ObjectId(req.user.user._id)}
+    ).updateOne({$set:{'photo': req.file.filename}}, (err, result) => {
+      if(err) {
+        throw err;
+      }
+      res.send('user updated sucessfully');
     });
 });
 

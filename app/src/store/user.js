@@ -1,10 +1,7 @@
 import api from './api';
 
 const state = {
-    user: {
-        nickname:'',
-        description:''
-    },
+    user: '',
     userPosts: []
 };
 
@@ -46,17 +43,26 @@ const actions = {
             commit('USER',payload.data.profilBilgisi);
         });
     },
+    async photoUpdate({commit}, payload){
+        api.post("photoupdate",payload)
+        .then(payloadPhoto =>{
+            api.get("profile")
+            .then(payload =>{
+                commit('USER',payload.data.profilBilgisi);
+            });
+        });
+    },
     async userProfilePost({commit}, payload){
         api.get("profilepost")
         .then(payload =>{
-            commit('USER_POST',payload.data);
+            commit('USER_POST',payload.data.reverse());
         });
     },
     async descriptionUpdate({commit}, payload){
         api.put("profile",{description: payload})
         .then(payload =>{
             commit('USER', payload.data.profilBilgisi)
-        })
+        });
     },
     async userLogout({commit}, payload){
         await localStorage.removeItem('token');

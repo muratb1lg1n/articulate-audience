@@ -1,17 +1,26 @@
 <template>
   <div class="container">
     <div class="row mt-5">
-      <div class="col-3">
-        <div id="circle"></div>
+      <div class="col-3 text-center">
+        <div v-if="user.photo==null">
+          <input type='file' accept="image/jpeg, image/png, image/gif" class="inputFile" ref="file" @change="photo" name="photo" id="photo">
+          <label for="photo"><i class="fas fa-user-circle circle"></i></label>
+        </div>
+        <div v-else>
+          <input type='file' accept="image/jpeg, image/png, image/gif" class="inputFile" ref="file" @change="photo" name="photo" id="photo">
+          <label for="photo">
+            <img class="userPhoto" :src="'http://localhost:3000/userPhotos/'+user.photo">
+          </label>
+        </div>
         <div id="username">@{{user.nickname}}</div>
       </div>
       <div class="col-7" id="profiledetail">
-        <div v-show="!enterdes">{{user.description}}</div>
-        <textarea class="form-control" v-model="description" v-show="enterdes" :placeholder="user.description" rows="5"></textarea>
+        <div v-if="!enterdes">{{user.description}}</div>
+        <textarea class="form-control" v-model="description" v-else rows="5"></textarea>
       </div>
        <div class="col-2">
         <button @click="enterdes = true" class="btn float-right" v-show="!enterdes">Edit Description</button>
-        <button @click="descriptionUpdate(description)" class="btn float-right" v-show="enterdes">Save</button>
+        <button @click="descriptionUpdateOne()" class="btn float-right" v-show="enterdes">Save</button>
         <button @click="enterdes = false" class="btn float-right" v-show="enterdes">Cancel</button>
         <button @click="userLogout" class="btn float-right" id="extbtn">Logout</button>
       </div>
@@ -40,10 +49,11 @@ export default {
     return {
       description: '',
       enterdes: false,
+      photoFile: new FormData()
     }
   },
-  mounted(){
-    this.userProfile();
+  async mounted(){
+    await this.userProfile();
   },
   computed: {
     ...mapGetters([
@@ -54,21 +64,27 @@ export default {
     ...mapActions([
       'userLogout',
       'userProfile',
-      'descriptionUpdate'
-    ])
+      'photoUpdate'
+    ]),
+    async descriptionUpdateOne(){
+      await this.$store.dispatch('descriptionUpdate',this.description);
+      this.enterdes = await !this.enterdes;
+      await this.userProfile();
+    },
+    async photo(){
+      await this.photoFile.append('userPhoto',this.$refs.file.files[0])
+      await this.$store.dispatch('photoUpdate',this.photoFile);
+      await this.userProfile();
+    }
   },
 }
 
 </script>
 
 <style scoped>
-
-#circle{
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  background-color: grey;
-  margin: 0 auto;
+.circle{
+  font-size: 8em !important;
+  cursor: pointer;
 }
 #username{
   text-align: center;
@@ -110,6 +126,27 @@ li{
 #extbtn{
   background: #812da8;
   color: white;
+}
+.inputFile{
+  width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+.userPhoto{
+  cursor: pointer;
+  width: 200px;
+  height: 200px;
+  border-radius: 100px;
+  border: 10px solid #e1e1e1;
+  background-color: #000;
+  position: relative;
+}
+.userPhoto:hover{
+  background-color: #000;
+  opacity: 0.5;
 }
 
 </style>

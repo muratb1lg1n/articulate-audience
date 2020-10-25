@@ -5,17 +5,14 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const port = 3000;
 const router = require('./router');
-
-
-
+const path = require("path");
 const url = 'mongodb://127.0.0.1:27017/bisiklet'
-
-
 
 //paketleri express de kullan
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, 'public')));
 app.use('/',router);
 
 //veri tabanı bağlantısı

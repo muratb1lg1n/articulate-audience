@@ -6,7 +6,14 @@
         <textarea v-model="post" class="form-control" rows="5"></textarea>
         <button @click="postAdding(post)" class="btn float-right mt-4">Post</button>
       </div>
-      <div class="col-12 mb-5">
+      <div class="col-12 mt-4" v-if="!posts.length">
+        <div class="card">
+          <div class="card-body text-center">
+            No post!
+          </div>
+        </div>
+      </div>
+      <div class="col-12 mb-5" v-else>
         <h4>Posted Earlier</h4>
           <ul>
             <li v-for="post in posts" :key="post._id">
