@@ -9,6 +9,10 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    topic:{
+        type: String,
+        required: true
+    },
     date:{
         type: Date,
         default: Date.now(),

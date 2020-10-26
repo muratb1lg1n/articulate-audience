@@ -3,13 +3,31 @@
     <div class="row mt-5">
       <div class="col-12">
         <h4>Post something!</h4>
-        <textarea v-model="post" class="form-control" rows="5"></textarea>
-        <button @click="postAdding(post)" class="btn float-right mt-4">Post</button>
+        <textarea v-model="post" class="form-control" rows="5" autofocus></textarea>
+      </div>
+      <div class="col-3">
+        <div class="form-group">
+          <span for="exampleFormControlSelect1">Choose a topic</span>
+          <select class="form-control" id="exampleFormControlSelect1" v-model="topic">
+            <option value="basketball">Basketball</option>
+            <option value="bicycle">Bicycle</option>
+            <option value="football">Football</option>
+            <option value="hockey">Hockey</option>
+            <option value="quidditch">Quidditch</option>
+            <option value="skiing">Skiing</option>
+            <option value="snowbing">Snowboarding</option>
+            <option value="tabtennis">Table Tennis</option>
+            <option value="volleyb">Volleyball</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-9">
+        <button @click="addpost()" class="btn float-right mt-4">Post</button>
       </div>
       <div class="col-12 mt-4" v-if="!posts.length">
         <div class="card">
           <div class="card-body text-center">
-            No post!
+            Be first one to post!
           </div>
         </div>
       </div>
@@ -17,9 +35,16 @@
         <h4>Posted Earlier</h4>
           <ul>
             <li v-for="post in posts" :key="post._id">
-              <button @click="postDelete(post)" class="btn float-right" id="dltbtn">X</button>
-              {{post.post}}<br>
-              {{post.userInfo[0].nickname}}
+              <div class="row">
+                <div class="col-1">
+                  <img :src= "require(`../assets/postimg/${post.topic}.svg`)">
+                </div>
+                <div class="col-11">
+                  <button @click="postDelete(post)" class="btn float-right" id="dltbtn">X</button>
+                  {{post.post}}<br>
+                  {{post.userInfo[0].nickname}}
+              </div>
+              </div>
             </li>
           </ul>
       </div>
@@ -35,7 +60,8 @@ export default {
   name: 'Homepage',
   data () {
     return {
-      post:''
+      post: '',
+      topic: ''
     }
   },
   mounted(){
@@ -44,14 +70,17 @@ export default {
   computed: {
     ...mapGetters([
       'posts'
-    ])
+    ]),
   },
   methods: {
     ...mapActions([
       'postListing',
-      'postAdding',
       'postDelete'
-    ])
+    ]),
+    async addpost(){
+      await this.$store.dispatch('postAdding', {post:this.post, topic:this.topic});
+      this.post = await ''
+    },
   },
 }
 
@@ -72,6 +101,11 @@ li{
   border-radius: 5px;
   padding: 10px;
   list-style-type: none;
+}
+img{
+  width: 40px;
+  height: 40px;
+  float: right;
 }
 .btn{
   width: 180px;

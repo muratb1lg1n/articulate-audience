@@ -83,7 +83,7 @@ export default {
 
 <style scoped>
 .circle{
-  font-size: 8em !important;
+  font-size: 12.5em !important;
   cursor: pointer;
 }
 #username{
@@ -140,7 +140,7 @@ li{
   width: 200px;
   height: 200px;
   border-radius: 100px;
-  border: 10px solid #e1e1e1;
+  border: 9px solid #812da8;
   background-color: #000;
   position: relative;
 }

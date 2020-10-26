@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const port = 3000;
 const router = require('./router');
 const path = require("path");
-const url = 'mongodb://127.0.0.1:27017/bisiklet'
+const url = 'mongodb://127.0.0.1:27017/audience'
 
 //paketleri express de kullan
 app.use(cors());

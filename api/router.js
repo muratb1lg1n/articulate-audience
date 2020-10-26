@@ -36,7 +36,6 @@ const loginCheck = (req, res, next) => {
   const upload = multer({ storage : storage});
 
 
-//kullanıcı
 router.post('/login', (req,res)=> {
     User.findOne({email:req.body.email}).then(user=>{
         if(user!==null){
@@ -99,8 +98,8 @@ router.post('/signup', (req,res)=> {
 router.get('/profile',loginCheck,(req,res)=> {
     User.findOne({
         _id:ObjectId(req.user.user._id)
-    }).then(profilBilgisi=>{
-        res.json({profilBilgisi});
+    }).then(profileInfo=>{
+        res.json({profileInfo});
     });
 });
 router.put('/profile',loginCheck,(req,res)=> {
@@ -116,8 +115,8 @@ router.put('/profile',loginCheck,(req,res)=> {
 router.get('/profilepost',loginCheck,(req,res)=> {
     Post.find({
         user_id:ObjectId(req.user.user._id)
-    }).then(profilPaylasimlar=>{
-        res.json(profilPaylasimlar);
+    }).then(profilePosts=>{
+        res.json(profilePosts);
     });
 });
 router.post('/photoupdate',[loginCheck,upload.single('userPhoto')],(req,res)=> {
@@ -132,16 +131,16 @@ router.post('/photoupdate',[loginCheck,upload.single('userPhoto')],(req,res)=> {
 });
 
 
-//paylaşım
 router.post('/post',loginCheck,(req,res)=> {
     var newPost = new Post({
         user_id: req.user.user._id,
-        post: req.body.post
+        post: req.body.post,
+        topic: req.body.topic
     });
     newPost.save().then(data=>{
-        res.json({response: 'Paylasim Basarili'});
+        res.json({response: 'Post successful'});
     }).catch(err=>{
-        res.json({response:'Paylasim Basiriz'})
+        res.json({response:'Post unsuccessful'})
     });
 });
 
@@ -163,8 +162,8 @@ router.get('/post',loginCheck,(req, res)=>{
                 }
             }
         }
-    ]).then(veriler => {
-        res.json(veriler);
+    ]).then(data => {
+        res.json(data);
     })
 });
 
@@ -172,7 +171,7 @@ router.delete('/post/:id',loginCheck,(req,res)=>{
     const id = req.params.id;
     Post.deleteOne({_id: id}).then(data=>{
         res.status(200).json({
-            mesaj: 'Site başarıyla silindi!'
+            mesaj: 'Post deleted'
         });
     });
 })

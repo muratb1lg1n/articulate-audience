@@ -26,7 +26,7 @@ const actions = {
         });
     },
     postAdding({commit},  payload){
-        api.post('post',{post: payload}).then(res=>{
+        api.post('post', payload).then(res=>{
             api.get('post').then(res=>{
                 commit('POST_LISTING', res.data.reverse());
             });

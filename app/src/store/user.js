@@ -40,7 +40,7 @@ const actions = {
     async userProfile({commit}, payload){
         api.get("profile")
         .then(payload =>{
-            commit('USER',payload.data.profilBilgisi);
+            commit('USER',payload.data.profileInfo);
         });
     },
     async photoUpdate({commit}, payload){
@@ -48,7 +48,7 @@ const actions = {
         .then(payloadPhoto =>{
             api.get("profile")
             .then(payload =>{
-                commit('USER',payload.data.profilBilgisi);
+                commit('USER',payload.data.profileInfo);
             });
         });
     },
@@ -61,7 +61,7 @@ const actions = {
     async descriptionUpdate({commit}, payload){
         api.put("profile",{description: payload})
         .then(payload =>{
-            commit('USER', payload.data.profilBilgisi)
+            commit('USER', payload.data.profileInfo)
         });
     },
     async userLogout({commit}, payload){
