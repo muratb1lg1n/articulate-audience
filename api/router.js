@@ -33,7 +33,18 @@ const loginCheck = (req, res, next) => {
         callback(null, uuid.v4());
     }
   });
+
+  const storage2 = multer.diskStorage({
+    destination : function(req,file,callback){
+        callback(null, './public/postPhotos/');
+    },
+    filename: function(req,file,callback){
+        callback(null, uuid.v4());
+    }
+  });
+
   const upload = multer({ storage : storage});
+  const upload2 = multer({ storage : storage2});
 
 
 router.post('/login', (req,res)=> {
@@ -41,23 +52,24 @@ router.post('/login', (req,res)=> {
         if(user!==null){
             bcrypt.compare(req.body.password,user.password).then(match=>{
                 if(!match){
-                    res.status(401).json({
+                    res.json({
                         success: false,
                         response: 'False email or password!'
                     });
                 } else {
                     const token = jwt.sign({user}, 'murat12345', {expiresIn: 3600});
-                    res.status(200).json({
+                    res.json({
+                        success: true,
                         token: token,
                         response: 'Login successful!'
                     });
                 }
             });
         } else {
-            res.status(401).json({response:'False email or password!'});
+            res.json({success: false,response:'False email or password!'});
         }
     }).catch(err=>{
-        res.status(500).json({response:'Login failed!'});
+        res.status(500).json({success: false,response:'Login failed!'});
     });
 });
 
@@ -77,18 +89,26 @@ router.post('/signup', (req,res)=> {
             User.findOne({email:email}).then(email=>{
                 if(email === null){
                     newUser.save().then(data=>{
-                        res.json({response:'Login successful!'});
+                        res.json({
+                            success: true,
+                            response:'Login successful!'
+                        });
                     }).catch(err=>{
-                        res.json({response:'Login failed!'});
+                        res.json({
+                            success: true,
+                            response:'Login failed!'
+                        });
                     });
                 }else{
-                    res.status(400).json({
+                    res.json({
+                        success: false,
                         response: "This email is already registered!"
                     })
                 }
             })
         }else{
-            res.status(400).json({
+            res.json({
+                success: false,
                 response: "This nickname is already registered!"
             })
         }
@@ -122,21 +142,41 @@ router.get('/profilepost',loginCheck,(req,res)=> {
 router.post('/photoupdate',[loginCheck,upload.single('userPhoto')],(req,res)=> {
     User.findOne(
         {_id: ObjectId(req.user.user._id)}
-    ).updateOne({$set:{'photo': req.file.filename}}, (err, result) => {
-      if(err) {
-        throw err;
-      }
+    ).updateOne({
+        $set:{
+            'photo': req.file.filename
+        }}, (err, result) => {
+            if(err) {
+                throw err;
+            }
       res.send('user updated sucessfully');
     });
 });
 
 
-router.post('/post',loginCheck,(req,res)=> {
-    var newPost = new Post({
-        user_id: req.user.user._id,
-        post: req.body.post,
-        topic: req.body.topic
-    });
+router.post('/post',[loginCheck,upload2.single('photo')],(req,res)=> {
+
+    date = new Date(); 
+    date.toLocaleTimeString();  
+    var localDate = ""+date;
+
+    if(req.body.photoCheck){
+        var newPost = new Post({
+            user_id: req.user.user._id,
+            post: req.body.post,
+            topic: req.body.topic,
+            photo: req.file.filename,
+            date: localDate
+        });
+    } else {
+        var newPost = new Post({
+            user_id: req.user.user._id,
+            post: req.body.post,
+            topic: req.body.topic,
+            date: localDate
+        });
+    }
+    
     newPost.save().then(data=>{
         res.json({response: 'Post successful'});
     }).catch(err=>{

@@ -2,7 +2,8 @@ import api from './api';
 
 const state = {
     user: '',
-    userPosts: []
+    userPosts: [],
+    error: null
 };
 
 const getters = {
@@ -11,6 +12,9 @@ const getters = {
     },
     userPosts(state){
         return state.userPosts;
+    },
+    error(state){
+        return state.error;
     }
 };
 
@@ -21,20 +25,32 @@ const mutations = {
     USER_POST(state,payload){
         state.userPosts = payload;
     },
+    ERROR(state,payload){
+        state.error = payload;
+    }
 };
 
 const actions = {
     async userLogin({commit}, payload){
+        commit('ERROR','');
         api.post("login", payload)
         .then(payload =>{
-            localStorage.setItem('token',payload.data.token);
-            window.location = '/';
+            if (payload.data.success==false){
+                commit('ERROR',payload.data.response);
+            } else {
+                localStorage.setItem('token',payload.data.token);
+                window.location = '/';
+            }
         });
     },
     async userSignup({commit}, payload){
         api.post("signup",payload)
         .then(payload =>{
-            window.location = '/';
+            if (payload.data.success==false){
+                commit('ERROR',payload.data.response);
+            } else {
+                window.location = '/';
+            }
         });
     },
     async userProfile({commit}, payload){

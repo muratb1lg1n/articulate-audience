@@ -8,17 +8,14 @@ import store from './store'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faBicycle,faUserCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import VueTimeago from 'vue-timeago'
+
 
 library.add(faBicycle)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = false;
 
+Vue.use(require('vue-moment'));
 
- 
-Vue.use(VueTimeago, {
-  locale: 'tr'
-})
 
 /* eslint-disable no-new */
 new Vue({
