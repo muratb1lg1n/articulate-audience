@@ -51,6 +51,7 @@ const actions = {
             } else {
                 window.location = '/';
             }
+<<<<<<< HEAD
         });
     },
     async userReset({commit}, payload){
@@ -71,6 +72,8 @@ const actions = {
             } else {
                 window.location = '/';
             }
+=======
+>>>>>>> 9fdca4a51caf4a9e7f6dac5c570e31ee142de983
         });
     },
     async userProfile({commit}, payload){

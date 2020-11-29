@@ -15,7 +15,12 @@ Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = false;
 Vue.use(require('vue-moment'));
 
+Vue.use(require('vue-moment'));
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9fdca4a51caf4a9e7f6dac5c570e31ee142de983
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

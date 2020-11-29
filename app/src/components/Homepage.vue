@@ -55,7 +55,11 @@
                 </div>
                 <div class="col-11 py-3" v-else>
                   <button v-show="user.nickname==post.userInfo[0].nickname" @click="postDelete(post)" class="btn float-right" id="dltbtn">X</button>
+<<<<<<< HEAD
                   {{post.userInfo[0].nickname}} - <timeago :datetime="post.date" locale="tr-TR"></timeago>
+=======
+                  {{post.userInfo[0].nickname}} - {{post.date | moment("from")}}
+>>>>>>> 9fdca4a51caf4a9e7f6dac5c570e31ee142de983
                   <p>
                     <img :src="'http://localhost:3000/postPhotos/'+post.photo">
                   </p>
