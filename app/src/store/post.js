@@ -7,7 +7,7 @@ const state = {
 const getters = {
     posts(state){
         return state.posts;
-    },
+    }
 };
 
 const mutations = {
@@ -20,19 +20,19 @@ const mutations = {
 };
 
 const actions = {
-    postListing({commit},  payload){
+    postListing({commit,payload}){
         api.get('post').then(res=>{
             commit('POST_LISTING', res.data.reverse());
         });
     },
-    postAdding({commit},  payload){
+    postAdding({commit},payload){
         api.post('post', payload).then(res=>{
             api.get('post').then(res=>{
                 commit('POST_LISTING', res.data.reverse());
             });
         });
     },
-    postDelete({commit},  payload){
+    postDelete({commit},payload){
         api.delete('post/'+ payload._id).then(res=>{
             commit('POST_DELETE',  payload);
         });

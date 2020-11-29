@@ -3,10 +3,11 @@ import Router from 'vue-router'
 import NotFound from '@/components/NotFound'
 import Login from '@/components/Login'
 import Signup from '@/components/Signup'
+import Reset from '@/components/Reset'
+import Password from '@/components/Password'
 import Navbar from '@/components/Navbar'
 import Homepage from '@/components/Homepage'
 import Profile from '@/components/Profile'
-import ProfilePost from '@/components/ProfilePost'
 
 Vue.use(Router)
 
@@ -27,6 +28,14 @@ const router = new Router({
       component: Signup,
     },
     {
+      path: '/reset',
+      component: Reset,
+    },
+    {
+      path: '/password/:token',
+      component: Password,
+    },
+    {
       path: '/',
       name: Navbar,
       component: Navbar,
@@ -38,14 +47,8 @@ const router = new Router({
         },
 
         {
-          path: '/profile',
-          component: Profile,
-          children: [
-            {
-              path: '/profile',
-              component: ProfilePost
-            }
-          ]
+          path: '/profile/:nickname',
+          component: Profile
         }
       ]
     }

@@ -7,6 +7,9 @@
           <div v-show="err.show" class="alert alert-danger" role="alert">
             {{err.msg}}
           </div>
+          <div v-show="error" class="alert alert-danger" role="alert">
+            {{error}}
+          </div>
         </div>
         <div class="col-12">
           <input type="text" class="form-control" v-model="email" placeholder="Email">
@@ -19,6 +22,9 @@
         </div>
         <div class="col-12 mt-3 text-center">
           If you don't have account, <router-link to="/signup">Create One!</router-link>
+        </div>
+        <div class="col-12 mt-2 text-center">
+          <router-link to="/reset">Reset Password!</router-link>
         </div>
       </div>
     </div>
@@ -44,6 +50,7 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'error',
       'user'
     ])
   },

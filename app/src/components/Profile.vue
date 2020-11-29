@@ -2,23 +2,35 @@
   <div class="container">
     <div class="row mt-5">
       <div class="col-3 text-center">
-        <div v-if="user.photo==null">
-          <input type='file' accept="image/jpeg, image/png, image/gif" class="inputFile" ref="file" @change="photo" name="photo" id="photo">
-          <label for="photo"><i class="fas fa-user-circle circle"></i></label>
+        <div v-if="!other">
+          <div v-if="user.photo==null">
+            <input type='file' accept="image/jpeg, image/png, image/gif" class="inputFile" ref="file" @change="photo" name="photo" id="photo">
+            <label for="photo"><i class="fas fa-user-circle circle"></i></label>
+          </div>
+          <div v-else>
+            <input type='file' accept="image/jpeg, image/png, image/gif" class="inputFile" ref="file" @change="photo" name="photo" id="photo">
+            <label for="photo">
+              <img class="userPhoto" :src="'http://localhost:3000/userPhotos/'+user.photo">
+            </label>
+          </div>
         </div>
         <div v-else>
-          <input type='file' accept="image/jpeg, image/png, image/gif" class="inputFile" ref="file" @change="photo" name="photo" id="photo">
           <label for="photo">
-            <img class="userPhoto" :src="'http://localhost:3000/userPhotos/'+user.photo">
+            <img class="userPhoto" :src="'http://localhost:3000/userPhotos/'+otherProfile.photo">
           </label>
         </div>
-        <div id="username">@{{user.nickname}}</div>
+        <div id="username" v-if="!other">@{{user.nickname}}</div>
+        <div id="username" v-else>@{{otherProfile.nickname}}</div>
       </div>
-      <div class="col-7" id="profiledetail">
+      <div class="col-7" id="profiledetail" v-if="!other">
         <div v-if="!enterdes">{{user.description}}</div>
         <textarea class="form-control" v-model="description" v-else rows="5"></textarea>
       </div>
-       <div class="col-2">
+      <div class="col-7" id="profiledetail" v-else>
+        <div v-if="!enterdes">{{otherProfile.description}}</div>
+        <textarea class="form-control" v-model="description" v-else rows="5"></textarea>
+      </div>
+       <div class="col-2" v-show="!other">
         <button @click="enterdes = true" class="btn float-right" v-show="!enterdes">Edit Description</button>
         <button @click="descriptionUpdateOne()" class="btn float-right" v-show="enterdes">Save</button>
         <button @click="enterdes = false" class="btn float-right" v-show="enterdes">Cancel</button>
@@ -26,14 +38,46 @@
       </div>
     </div>
     <hr id="line">
-    <div class="row">
-      <div class="col-3">
-        <ul>
-          <li><router-link class="btn" to="/profile">My Posts</router-link></li>
+    <div class="row" v-if="!other">
+      <div class="col-12">
+        <h3>My Posts</h3>
+      </div>
+      <div class="col-12">
+        <ul class="user-posts">
+          <li v-for="post in userPosts" :key="post._id">
+            <span v-if="!post.photo">
+              <strong>{{user.nickname}}</strong> - {{post.date | moment("from")}}<br>
+              {{post.post}}
+            </span>
+            <span v-else>
+              {{user.nickname}} - {{post.date | moment("from")}}
+              <p>
+                <img :src="'http://localhost:3000/postPhotos/'+post.photo">
+              </p>
+            </span>
+          </li>
         </ul>
       </div>
-      <div class="col-9">
-        <router-view/>
+    </div>
+    <div class="row" v-else>
+      <div class="col-12">
+        <h3>{{otherProfile.nickname}}'s Posts</h3>
+      </div>
+      <div class="col-12">
+        <ul class="user-posts">
+          <li v-for="post in otherPosts" :key="post._id">
+            <span v-if="!post.photo">
+              <strong>{{otherProfile.nickname}}</strong> - {{post.date | moment("from")}}<br>
+              {{post.post}}
+            </span>
+            <span v-else>
+              <strong>{{otherProfile.nickname}}</strong> - {{post.date | moment("from")}}
+              <p>
+                <img :src="'http://localhost:3000/postPhotos/'+post.photo">
+              </p>
+            </span>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -47,6 +91,8 @@ export default {
   name: 'Profile',
   data () {
     return {
+      other: false,
+      otherNickName: null,
       description: '',
       enterdes: false,
       photoFile: new FormData()
@@ -54,17 +100,30 @@ export default {
   },
   async mounted(){
     await this.userProfile();
+    await this.userProfilePost();
+    if(this.user.nickname !== this.$route.params.nickname){
+      this.other = true;
+      this.otherNickName = this.$route.params.nickname;
+      this.otherProfileGet(this.$route.params.nickname);
+      this.otherPostListing(this.$route.params.nickname);
+    }
   },
   computed: {
     ...mapGetters([
-      'user'
+      'user',
+      'userPosts',
+      'otherProfile',
+      'otherPosts'
     ])
   },
   methods: {
     ...mapActions([
       'userLogout',
       'userProfile',
-      'photoUpdate'
+      'photoUpdate',
+      'userProfilePost',
+      'otherPostListing',
+      'otherProfileGet'
     ]),
     async descriptionUpdateOne(){
       await this.$store.dispatch('descriptionUpdate',this.description);
@@ -82,6 +141,9 @@ export default {
 </script>
 
 <style scoped>
+h3{
+  color: #812da8;
+}
 .circle{
   font-size: 12.5em !important;
   cursor: pointer;
@@ -147,6 +209,24 @@ li{
 .userPhoto:hover{
   background-color: #000;
   opacity: 0.5;
+}
+
+.user-posts {
+  padding: 0px !important;
+  margin: 0px 0px 50px 0px !important;
+}
+.user-posts li{
+  list-style-type: none !important;
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+  margin-top: 15px !important;
+  padding: 10px;
+  cursor: pointer;
+  text-align: left;
+}
+.user-posts li:hover{
+  border: 1px solid #000;
+  background-color: #f9f9f9;
 }
 
 </style>
