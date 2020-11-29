@@ -50,12 +50,14 @@
                 </div>
                 <div class="col-11" v-if="!post.photo">
                   <button v-show="user.nickname==post.userInfo[0].nickname" @click="postDelete(post)" class="btn float-right" id="dltbtn">X</button>
-                  <router-link :to="'/profile/'+post.userInfo[0].nickname"><strong>{{post.userInfo[0].nickname}}</strong></router-link> - {{post.date | moment("from")}}<br>
+                  <strong>{{post.userInfo[0].nickname}}</strong> - {{post.date | moment("from")}}<br>
                   {{post.post}}
                 </div>
                 <div class="col-11 py-3" v-else>
                   <button v-show="user.nickname==post.userInfo[0].nickname" @click="postDelete(post)" class="btn float-right" id="dltbtn">X</button>
+
                   <router-link :to="'/profile/'+post.userInfo[0].nickname"><strong>{{post.userInfo[0].nickname}}</strong></router-link> - {{post.date | moment("from")}}
+                  {{post.userInfo[0].nickname}} - {{post.date | moment("from")}}
                   <p>
                     <img :src="'http://localhost:3000/postPhotos/'+post.photo">
                   </p>

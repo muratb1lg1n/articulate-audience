@@ -9,7 +9,11 @@
         </ul>
         <ul class="navbar-nav">
           <li class="nav-item active">
+<<<<<<< HEAD
             <router-link class="nav-link" :to="'/profile/'+user.nickname"><div id="rect2">Profile</div></router-link>
+=======
+            <router-link class="nav-link" to="/profile"><div id="rect2">Profile</div></router-link>
+>>>>>>> 072410e6a4b8e9c6a928b3862bd3ee4591dced3f
           </li>
         </ul>
       </div>

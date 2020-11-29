@@ -15,6 +15,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = false;
 Vue.use(require('vue-moment'));
 
+Vue.use(require('vue-moment'));
 
 /* eslint-disable no-new */
 new Vue({

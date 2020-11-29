@@ -206,7 +206,10 @@ router.post('/password',(req,res)=>{
     }  
 })
 
+<<<<<<< HEAD
 //profile info
+=======
+>>>>>>> 072410e6a4b8e9c6a928b3862bd3ee4591dced3f
 router.get('/profile',loginCheck,(req,res)=> {
     User.findOne({
         _id:ObjectId(req.user.user._id)
@@ -269,7 +272,10 @@ router.get('/otherprofile/:nickname',loginCheck,(req,res)=> {
     })
 });
 
+<<<<<<< HEAD
 //all posts
+=======
+>>>>>>> 072410e6a4b8e9c6a928b3862bd3ee4591dced3f
 router.post('/post',[loginCheck,upload2.single('photo')],(req,res)=> {
 
     date = new Date(); 
