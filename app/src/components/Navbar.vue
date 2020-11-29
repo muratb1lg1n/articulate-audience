@@ -4,12 +4,12 @@
       <div class="container collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <router-link class="nav-link" to="/"><div id="rect">Articulate Audience</div></router-link>
+            <router-link class="nav-link" to="/"><div id="rect1">Articulate Audience</div></router-link>
           </li>
         </ul>
         <ul class="navbar-nav">
           <li class="nav-item active">
-            <router-link class="nav-link" to="/profile"><div id="rect">Profile</div></router-link>
+            <router-link class="nav-link" to="/profile"><div id="rect2">Profile</div></router-link>
           </li>
         </ul>
       </div>
@@ -39,8 +39,8 @@ export default {
 li{
   list-style: none;
 }
-#rect{
-  width: 160px;
+#rect1{
+  width: 200px;
   height: 40px;
   border-radius: 10px;
   text-align: center;
@@ -48,7 +48,16 @@ li{
   justify-content:center;
   align-items: center;
 }
-#rect:hover{
+#rect2{
+  width: 110px;
+  height: 40px;
+  border-radius: 10px;
+  text-align: center;
+  display: flex;
+  justify-content:center;
+  align-items: center;
+}
+#rect1:hover,#rect2:hover{
   color: #812da8;
   background: white;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);

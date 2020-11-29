@@ -3,6 +3,8 @@ import Router from 'vue-router'
 import NotFound from '@/components/NotFound'
 import Login from '@/components/Login'
 import Signup from '@/components/Signup'
+import Reset from '@/components/Reset'
+import Password from '@/components/Password'
 import Navbar from '@/components/Navbar'
 import Homepage from '@/components/Homepage'
 import Profile from '@/components/Profile'
@@ -25,6 +27,14 @@ const router = new Router({
     {
       path: '/signup',
       component: Signup,
+    },
+    {
+      path: '/reset',
+      component: Reset,
+    },
+    {
+      path: '/password/:token',
+      component: Password,
     },
     {
       path: '/',

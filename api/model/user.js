@@ -24,6 +24,9 @@ const userSchema = new mongoose.Schema({
     },
     photo:{
         type:String
+    },
+    resetlink: {
+        type: String
     }
 },
 {

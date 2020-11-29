@@ -7,6 +7,9 @@
           <div v-show="err.showdes" class="alert alert-danger" role="alert">
             {{err.showdes}}
           </div>
+          <div v-show="error" class="alert alert-danger" role="alert">
+            {{error}}
+          </div>
         </div>
         <div class="col-12">
           <input type="text" class="form-control" v-model="email" placeholder="Email">
@@ -42,6 +45,11 @@ export default {
         msg: ''
       }
     }
+  },
+  computed: {
+    ...mapGetters([
+      'error'
+    ])
   },
   methods:{
     ...mapActions([

@@ -9,7 +9,17 @@ const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const multer  = require('multer');
 const uuid = require('uuid');
+var nodemailer = require('nodemailer');
 
+var transporter = nodemailer.createTransport({direct:true,
+    host: 'smtp.yandex.com',
+    port: 465,
+    auth: { 
+        user: 'mrat453@yandex.com', 
+        pass: 'Awq2466@' 
+    },
+    secure: true
+});
 
 const loginCheck = (req, res, next) => {
     try {
@@ -33,7 +43,18 @@ const loginCheck = (req, res, next) => {
         callback(null, uuid.v4());
     }
   });
+
+  const storage2 = multer.diskStorage({
+    destination : function(req,file,callback){
+        callback(null, './public/postPhotos/');
+    },
+    filename: function(req,file,callback){
+        callback(null, uuid.v4());
+    }
+  });
+
   const upload = multer({ storage : storage});
+  const upload2 = multer({ storage : storage2});
 
 
 router.post('/login', (req,res)=> {
@@ -41,23 +62,24 @@ router.post('/login', (req,res)=> {
         if(user!==null){
             bcrypt.compare(req.body.password,user.password).then(match=>{
                 if(!match){
-                    res.status(401).json({
+                    res.json({
                         success: false,
                         response: 'False email or password!'
                     });
                 } else {
                     const token = jwt.sign({user}, 'murat12345', {expiresIn: 3600});
-                    res.status(200).json({
+                    res.json({
+                        success: true,
                         token: token,
                         response: 'Login successful!'
                     });
                 }
             });
         } else {
-            res.status(401).json({response:'False email or password!'});
+            res.json({success: false,response:'False email or password!'});
         }
     }).catch(err=>{
-        res.status(500).json({response:'Login failed!'});
+        res.status(500).json({success: false,response:'Login failed!'});
     });
 });
 
@@ -77,23 +99,112 @@ router.post('/signup', (req,res)=> {
             User.findOne({email:email}).then(email=>{
                 if(email === null){
                     newUser.save().then(data=>{
-                        res.json({response:'Login successful!'});
+                        res.json({
+                            success: true,
+                            response:'Login successful!'
+                        });
                     }).catch(err=>{
-                        res.json({response:'Login failed!'});
+                        res.json({
+                            success: true,
+                            response:'Login failed!'
+                        });
                     });
                 }else{
-                    res.status(400).json({
+                    res.json({
+                        success: false,
                         response: "This email is already registered!"
                     })
                 }
             })
         }else{
-            res.status(400).json({
+            res.json({
+                success: false,
                 response: "This nickname is already registered!"
             })
         }
     });
 });
+
+
+router.post('/reset',(req,res)=>{
+    User.findOne({email:req.body.email}).then(emailSorgu=>{
+        if(emailSorgu!==null){
+            const token = jwt.sign(
+                {email:emailSorgu.email}, 'murat12345', {expiresIn: 3000}
+            );
+            User.updateOne({resetlink: token}).then(guncellenenVeri=>{
+                const bilgiler = {
+                    from: 'mrat453@yandex.com', 
+                    to: req.body.email,
+                    subject: '', 
+                    text: '',
+                    html: `<p>Merhaba <b>${emailSorgu.nickname}</b>,<br>şifre sıfırlama 
+                    talebinde bulundun. Aşağıdaki linke tıklayarak şifreni 
+                    sıfırlayabilirsin.</p><p><a href="http://localhost:8080/password/${token}">
+                    Şifreyi sıfırlamak için tıklayınız!</a></p>`
+                }
+                transporter.sendMail(bilgiler,(err,info)=>{
+                    res.status(201).json({
+                        mesaj: 'Email adresinize sıfırlama linki gönderildi!'
+                    });
+                });
+            }).catch(err=>{
+                res.status(400).json({
+                    mesaj: 'Sıfırlama isteği işlemi başarısız oldu!'
+                });
+            });
+        } else {
+            res.status(401).json({
+                mesaj: 'Email adresi hatalı!'
+            });
+        }
+    }).catch(err=>{
+        res.status(400).json({
+            mesaj: 'Sıfırlama isteği işlemi başarısız oldu!'
+        });
+    });
+})
+
+router.post('/password',(req,res)=>{
+    const {token,password} = req.body;
+    if(password){
+        User.findOne({resetlink:token}).then(kullaniciVeri=>{
+            bcrypt.hash(password,8,(err,pass)=>{
+                if(!err){
+                    if(kullaniciVeri!==null){
+                        User.updateOne(
+                            { resetlink: token },
+                            { $set: {
+                                password: pass,
+                                resetlink: ''
+                            }}
+                        ).then(guncellenenVeri=>{
+                            if(guncellenenVeri!==null){
+                                return res.status(200).json({
+                                    mesaj: 'Şifreniz başarıyla sıfırlandı!'
+                                });
+                                console.log('başarılı');
+                            }
+                            res.status(400).json({
+                                mesaj: 'Sıfırlama isteği işlemi başarısız oldu!'
+                            });
+                            console.log('başarılı2');
+                        }).catch(err=>{
+                            res.status(400).json({
+                                mesaj: 'Sıfırlama isteği işlemi başarısız oldu!'
+                            });
+                            console.log('başarısız');
+                        });
+                    }
+                }
+            });
+        }).catch(err=>{
+            res.status(400).json({
+                mesaj: 'Sıfırlama isteği işlemi başarısız oldu!'
+            });
+        });
+    }  
+})
 
 router.get('/profile',loginCheck,(req,res)=> {
     User.findOne({
@@ -122,21 +233,41 @@ router.get('/profilepost',loginCheck,(req,res)=> {
 router.post('/photoupdate',[loginCheck,upload.single('userPhoto')],(req,res)=> {
     User.findOne(
         {_id: ObjectId(req.user.user._id)}
-    ).updateOne({$set:{'photo': req.file.filename}}, (err, result) => {
-      if(err) {
-        throw err;
-      }
+    ).updateOne({
+        $set:{
+            'photo': req.file.filename
+        }}, (err, result) => {
+            if(err) {
+                throw err;
+            }
       res.send('user updated sucessfully');
     });
 });
 
 
-router.post('/post',loginCheck,(req,res)=> {
-    var newPost = new Post({
-        user_id: req.user.user._id,
-        post: req.body.post,
-        topic: req.body.topic
-    });
+router.post('/post',[loginCheck,upload2.single('photo')],(req,res)=> {
+
+    date = new Date(); 
+    date.toLocaleTimeString();  
+    var localDate = ""+date;
+
+    if(req.body.photoCheck){
+        var newPost = new Post({
+            user_id: req.user.user._id,
+            post: req.body.post,
+            topic: req.body.topic,
+            photo: req.file.filename,
+            date: localDate
+        });
+    } else {
+        var newPost = new Post({
+            user_id: req.user.user._id,
+            post: req.body.post,
+            topic: req.body.topic,
+            date: localDate
+        });
+    }
+    
     newPost.save().then(data=>{
         res.json({response: 'Post successful'});
     }).catch(err=>{
